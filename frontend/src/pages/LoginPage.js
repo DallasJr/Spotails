@@ -7,6 +7,7 @@ const LoginForm = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -27,34 +28,47 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="container mt-5">
-            <h1 className="text-center mb-4">Connexion</h1>
-            <form onSubmit={handleSubmit} className="w-50 mx-auto">
-                {error && <div className="alert alert-danger">{error}</div>}
-                <div className="mb-3">
-                    <label htmlFor="email" className="form-label">Email</label>
-                    <input
-                        type="email"
-                        className="form-control"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="password" className="form-label">Mot de passe</label>
-                    <input
-                        type="password"
-                        className="form-control"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                <button type="submit" className="btn btn-primary w-100">Se connecter</button>
-            </form>
+        <div className="login-form mt-5 p-5">
+            <div className="container">
+                <h1 className="text-center mb-4">Connexion</h1>
+                <form onSubmit={handleSubmit} className="w-50 mx-auto">
+                    {error && <div className="alert alert-danger">{error}</div>}
+                    <div className="mb-3">
+                        <label htmlFor="email" className="form-label">Email</label>
+                        <input
+                            type="email"
+                            className="form-control"
+                            id="email"
+                            value={email}
+                            placeholder="email@exemple.fr"
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="password" className="form-label">Mot de passe</label>
+                        <div className="input-group">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                className="form-control"
+                                id="password"
+                                value={password}
+                                placeholder="****************"
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                            <button
+                                type="button"
+                                className="btn"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? <i className="bi bi-eye-fill"></i> : <i className="bi bi-eye-slash-fill"></i>}
+                            </button>
+                        </div>
+                    </div>
+                    <button type="submit" className="btn w-100">Se connecter</button>
+                </form>
+            </div>
         </div>
     );
 };

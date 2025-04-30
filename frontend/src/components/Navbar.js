@@ -1,12 +1,21 @@
 import React from "react";
 import {Link, useNavigate} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import "../styles/Navbar.css";
+import { jwtDecode } from "jwt-decode";
 
 const Navbar = () => {
     const navigate = useNavigate();
     const username = localStorage.getItem("username");
+    const token = localStorage.getItem("token");
     const isAuthenticated = !!localStorage.getItem("token");
+
+    let isAdmin = false;
+    if (token) {
+        const decodedToken = jwtDecode(token);
+        isAdmin = decodedToken.role === "admin";
+    }
 
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -28,27 +37,33 @@ const Navbar = () => {
                 </Link>
 
                 <div className="d-flex align-items-center">
-                    <Link to="/cocktails" className="navbar-link me-2">
+                    <Link to="/cocktails" className="navbar-link me-4">
                         Nos Cocktails
                     </Link>
                     {isAuthenticated ? (
                         <>
-                            <Link to="/favorites" className="navbar-link me-2">
-                                Vos Favoris
+                            <Link to="/favorites" className="navbar-link navbar-link-fav me-4">
+                                <i className="bi bi-heart"></i>
                             </Link>
-                            <button className="btn btn-outline-light me-2">
+                            <Link to="#" className="navbar-link me-4">
+                                <i className="bi bi-person-fill me-1"></i>
                                 {username}
-                            </button>
-                            <button onClick={handleLogout} className="btn btn-danger">
-                                Déconnexion
-                            </button>
+                            </Link>
+                            {isAdmin && (
+                                <Link to="/admin" className="navbar-link navbar-link-admin me-4">
+                                    Admin
+                                </Link>
+                            )}
+                            <Link to="#" onClick={handleLogout} className="navbar-link navbar-link-logout me-4">
+                                <i className="bi bi-box-arrow-right"></i>
+                            </Link>
                         </>
                         ) : (
                         <>
-                            <Link to="/login" className="btn btn-text-white me-2">
+                            <Link to="/login" className="navbar-link navbar-link-login me-4">
                                 Connexion
                             </Link>
-                            <Link to="/register" className="btn btn-custom">
+                            <Link to="/register" className="navbar-link navbar-link-register">
                                 Inscription
                             </Link>
                         </>
