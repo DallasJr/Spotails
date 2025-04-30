@@ -1,9 +1,19 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/Navbar.css";
 
 const Navbar = () => {
+    const navigate = useNavigate();
+    const username = localStorage.getItem("username");
+    const isAuthenticated = !!localStorage.getItem("token");
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("username");
+        navigate("/");
+        window.location.reload();
+    };
     return (
         <nav className="navbar navbar-expand-lg navbar-custom d-flex justify-content-between align-items-center">
             <div className="container">
@@ -21,12 +31,28 @@ const Navbar = () => {
                     <Link to="/cocktails" className="navbar-link me-2">
                         Nos Cocktails
                     </Link>
-                    <Link to="/login" className="btn btn-text-white me-2">
-                        Connexion
-                    </Link>
-                    <Link to="/register" className="btn btn-custom">
-                        Inscription
-                    </Link>
+                    {isAuthenticated ? (
+                        <>
+                            <Link to="/favorites" className="navbar-link me-2">
+                                Vos Favoris
+                            </Link>
+                            <button className="btn btn-outline-light me-2">
+                                {username}
+                            </button>
+                            <button onClick={handleLogout} className="btn btn-danger">
+                                Déconnexion
+                            </button>
+                        </>
+                        ) : (
+                        <>
+                            <Link to="/login" className="btn btn-text-white me-2">
+                                Connexion
+                            </Link>
+                            <Link to="/register" className="btn btn-custom">
+                                Inscription
+                            </Link>
+                        </>
+                    )}
                 </div>
             </div>
         </nav>
