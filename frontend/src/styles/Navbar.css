@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+.navbar-custom {
+    background-color: #121212;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 1rem;
+}
+
+.navbar-custom .navbar-brand {
+    color: white;
+}
+
+.navbar-custom .btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.nav-link-custom {
+    color: #007bff;
+    text-decoration: none;
+    padding: 8px 12px;
+    font-weight: 500;
+}
+
+.nav-link-custom:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+.btn-text-white {
+    color: white;
+    background: transparent;
+    border: none;
+}
+
+.btn-text-white:hover {
+    color: #ddd;
+}
+
+.btn-custom {
+    background-color: #ff6600;
+    color: white;
+    border: none;
+}
+
+.btn-custom:hover {
+    background-color: #e65c00;
+    color: white;
+}
+
+.navbar-link {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+}
+
+.navbar-link:hover {
+    color: #ff6600;
+}
