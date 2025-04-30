@@ -20,6 +20,7 @@ const RegisterPage = () => {
             });
 
             localStorage.setItem("token", response.data.token);
+            localStorage.setItem("username", response.data.username);
 
             navigate("/");
         } catch (err) {

@@ -1,8 +1,8 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
+const generateToken = (id, role) => {
+    return jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };
 
 const registerUser = async (req, res) => {
@@ -21,11 +21,13 @@ const registerUser = async (req, res) => {
     });
 
     if (user) {
+        const token = generateToken(user._id, user.role);
         res.status(201).json({
             _id: user._id,
             username: user.username,
             email: user.email,
-            token: generateToken(user._id),
+            role: user.role,
+            token,
         });
     } else {
         res.status(400).json({ message: "Erreur lors de l'inscription" });
@@ -38,11 +40,13 @@ const loginUser = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user && (await user.matchPassword(password))) {
+        const token = generateToken(user._id, user.role);
         res.json({
             _id: user._id,
             username: user.username,
             email: user.email,
-            token: generateToken(user._id),
+            role: user.role,
+            token,
         });
     } else {
         res.status(401).json({ message: "Email ou mot de passe incorrect" });

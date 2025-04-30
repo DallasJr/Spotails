@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-
 .navbar-custom {
     background-color: #121212;
     display: flex;
@@ -54,6 +52,5 @@
     color: white;
     text-decoration: none;
     padding: 0.5rem;
-    font-family: 'Inter', sans-serif;
     font-weight: bold;
 }

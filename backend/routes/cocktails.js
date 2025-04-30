@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Cocktail = require("../models/Cocktail");
+const verifyAdmin = require('../middleware/verifyAdmin');
 
 router.get("/", async (req, res) => {
     const cocktails = await Cocktail.find();
@@ -12,10 +13,12 @@ router.get("/:id", async (req, res) => {
     res.json(cocktail);
 });
 
-router.post("/", async (req, res) => {
+router.post("/", verifyAdmin, async (req, res) => {
     try {
         const { name, image, ingredients, recipe, theme, description } = req.body;
-
+        if (!name || !image || !ingredients || !recipe || !theme || !description) {
+            return res.status(400).json({ message: 'Tous les champs sont requis.' });
+        }
         const newCocktail = new Cocktail({
             name,
             image,
@@ -26,9 +29,9 @@ router.post("/", async (req, res) => {
         });
 
         await newCocktail.save();
-        res.status(201).json(newCocktail);
+        return res.status(201).json({ message: 'Cocktail ajouté avec succès', cocktail: newCocktail });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        return res.status(500).json({ message: 'Erreur interne du serveur', error: err.message });
     }
 });
 
