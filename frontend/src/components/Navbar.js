@@ -28,7 +28,7 @@ const Navbar = () => {
             <div className="container">
                 <Link className="navbar-brand d-flex align-items-center" to="/">
                     <img
-                        src="/icon_1_-removebg-preview.png"
+                        src="/iconWhite.svg"
                         alt="logo"
                         width="40"
                         height="40"
