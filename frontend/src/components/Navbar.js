@@ -45,13 +45,13 @@ const Navbar = () => {
                             <Link to="/favorites" className="navbar-link navbar-link-fav me-4">
                                 <i className="bi bi-heart"></i>
                             </Link>
-                            <Link to="#" className="navbar-link me-4">
+                            <Link to="/account" className="navbar-link me-4">
                                 <i className="bi bi-person-fill me-1"></i>
                                 {username}
                             </Link>
                             {isAdmin && (
                                 <Link to="/admin" className="navbar-link navbar-link-admin me-4">
-                                    Admin
+                                    <i className="bi bi-gear"></i> Admin
                                 </Link>
                             )}
                             <Link to="#" onClick={handleLogout} className="navbar-link navbar-link-logout me-4">

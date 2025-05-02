@@ -8,15 +8,21 @@ const generateToken = (id, role) => {
 const registerUser = async (req, res) => {
     const { username, email, password } = req.body;
 
-    const userExists = await User.findOne({ email });
+    const usernameExists = await User.findOne({
+        username: { $regex: new RegExp("^" + username + "$", "i") }
+    });
+    if (usernameExists) {
+        return res.status(400).json({ message: "Nom d'utilisateur déjà pris." });
+    }
 
-    if (userExists) {
-        return res.status(400).json({ message: "L'utilisateur existe déjà" });
+    const emailExists = await User.findOne({ email: email.toLowerCase() });
+    if (emailExists) {
+        return res.status(400).json({ message: "Email déjà utilisé." });
     }
 
     const user = await User.create({
         username,
-        email,
+        email: email.toLowerCase(),
         password,
     });
 
@@ -37,7 +43,7 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.toLowerCase() });
 
     if (user && (await user.matchPassword(password))) {
         const token = generateToken(user._id, user.role);

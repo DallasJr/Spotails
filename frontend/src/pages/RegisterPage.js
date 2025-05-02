@@ -41,7 +41,7 @@ const RegisterPage = () => {
 
             navigate("/");
         } catch (err) {
-            setError("Erreur lors de l'inscription");
+            setError(err.response?.data?.message || "Erreur lors de l'inscription");
         }
     };
 
@@ -70,7 +70,7 @@ const RegisterPage = () => {
                         id="email"
                         value={email}
                         placeholder="email@exemple.fr"
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={(e) => setEmail(e.target.value.toLowerCase())}
                         required
                     />
                 </div>

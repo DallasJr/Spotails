@@ -41,7 +41,7 @@ const LoginForm = () => {
                             id="email"
                             value={email}
                             placeholder="email@exemple.fr"
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => setEmail(e.target.value.toLowerCase())}
                             required
                         />
                     </div>

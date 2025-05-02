@@ -7,6 +7,8 @@ import RegisterPage from "./pages/RegisterPage";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import FavoritesPage from "./pages/FavoritesPage";
+import NotFoundPage from "./pages/NotFoundPage";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
                       <Route path="/login" element={<LoginForm />} />
                       <Route path="/register" element={<RegisterPage />} />
                       <Route path="/favorites" element={<FavoritesPage />} />
+                      <Route path="/admin" element={<AdminDashboard />} />
+                      <Route path="*" element={<NotFoundPage />} />
                   </Routes>
               </div>
               <Footer /> {}

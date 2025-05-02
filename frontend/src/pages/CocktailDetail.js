@@ -2,35 +2,43 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import NotFoundPage from "./NotFoundPage";
 
 const CocktailDetail = () => {
     const { id } = useParams();
     const [cocktail, setCocktail] = useState(null);
     const [isFavorite, setIsFavorite] = useState(false);
+    const [notFound, setNotFound] = useState(false);
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/cocktails/${id}`).then((res) => {
-            setCocktail(res.data);
-        });
+        const fetchCocktail = async () => {
+            try {
+                const res = await axios.get(`http://localhost:5000/api/cocktails/${id}`);
+                setCocktail(res.data);
+            } catch (err) {
+                setNotFound(true);
+            }
+        };
+
+        const checkIfFavorite = async () => {
+            const token = localStorage.getItem("token");
+            if (!token) return;
+            try {
+                const res = await axios.get(
+                    `http://localhost:5000/api/favorites/check/${id}`,
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+                setIsFavorite(res.data.isFavorite);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchCocktail();
         const token = localStorage.getItem("token");
         if (token) {
             checkIfFavorite();
         }
     }, [id]);
-
-    const checkIfFavorite = async () => {
-        const token = localStorage.getItem("token");
-        if (!token) return;
-        try {
-            const res = await axios.get(
-                `http://localhost:5000/api/favorites/check/${id}`,
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
-            setIsFavorite(res.data.isFavorite);
-        } catch (err) {
-            console.error(err);
-        }
-    };
 
     const handleFavoriteToggle = async () => {
         const token = localStorage.getItem("token");
@@ -55,7 +63,8 @@ const CocktailDetail = () => {
         }
     };
 
-    if (!cocktail) return <div>Loading...</div>;
+    if (notFound) return <NotFoundPage />;
+    if (!cocktail) return <div>Chargement...</div>;
 
     return (
         <div className="container mt-5">
