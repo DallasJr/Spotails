@@ -20,10 +20,10 @@ const CocktailList = () => {
                     <div key={c._id} className="col-md-4 mb-4">
                         <div className="card h-100 shadow-sm">
                             <img
-                                src={c.image}
+                                src={`http://localhost:5000/uploads/${c.image}`}
                                 className="card-img-top"
                                 alt={c.name}
-                                style={{height: "250px", objectFit: "cover"}}
+                                style={{height: "250px", objectFit: "contain"}}
                             />
                             <div className="card-body d-flex flex-column">
                                 <h5 className="card-title">{c.name}</h5>

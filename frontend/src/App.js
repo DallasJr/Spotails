@@ -1,4 +1,6 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import PrivateRoute from "./components/PrivateRoute";
+import AdminRoute from "./components/AdminRoute";
 import CocktailList from "./pages/CocktailList";
 import CocktailDetail from "./pages/CocktailDetail";
 import LandingPage from "./pages/LandingPage";
@@ -8,23 +10,72 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import FavoritesPage from "./pages/FavoritesPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import AdminCocktailManager from "./pages/AdminCocktailManager";
+import AdminUserManager from "./pages/AdminUserManager";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminCocktailForm from "./pages/AdminCocktailForm";
 
 function App() {
   return (
       <Router>
-          <div className="d-flex flex-column min-vh-100"> {}
+          <div className="d-flex flex-column min-vh-100">
               <Navbar />
-              <div className="flex-grow-1"> {}
+              <div className="flex-grow-1">
                   <Routes>
                       <Route path="/" element={<LandingPage />} />
                       <Route path="/cocktails" element={<CocktailList />} />
                       <Route path="/cocktails/:id" element={<CocktailDetail />} />
                       <Route path="/login" element={<LoginForm />} />
                       <Route path="/register" element={<RegisterPage />} />
-                      <Route path="/favorites" element={<FavoritesPage />} />
-                      <Route path="/admin" element={<AdminDashboard />} />
+                      <Route
+                          path="/favorites"
+                          element={
+                              <PrivateRoute>
+                                  <FavoritesPage />
+                              </PrivateRoute>
+                          }
+                      />
                       <Route path="*" element={<NotFoundPage />} />
+                      <Route
+                          path="/admin"
+                          element={
+                              <AdminRoute>
+                                  <AdminDashboard />
+                              </AdminRoute>
+                          }
+                      />
+                      <Route
+                          path="/admin/cocktails"
+                          element={
+                              <AdminRoute>
+                                  <AdminCocktailManager />
+                              </AdminRoute>
+                          }
+                      />
+                      <Route
+                          path="/admin/users"
+                          element={
+                              <AdminRoute>
+                                  <AdminUserManager />
+                              </AdminRoute>
+                          }
+                      />
+                      <Route
+                          path="/admin/cocktails/add"
+                          element={
+                              <AdminRoute>
+                                  <AdminCocktailForm />
+                              </AdminRoute>
+                          }
+                      />
+                      <Route
+                          path="/admin/cocktails/edit/:id"
+                          element={
+                              <AdminRoute>
+                                  <AdminCocktailForm />
+                              </AdminRoute>
+                          }
+                      />
                   </Routes>
               </div>
               <Footer /> {}

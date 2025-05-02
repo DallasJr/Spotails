@@ -69,7 +69,7 @@ const CocktailDetail = () => {
     return (
         <div className="container mt-5">
             <h1>{cocktail.name}</h1>
-            <img src={cocktail.image} width={300} alt={cocktail.name} />
+            <img src={`http://localhost:5000/uploads/${cocktail.image}`} width={300} alt={cocktail.name} />
             <p><strong>Thème :</strong> {cocktail.theme}</p>
             <p><strong>Ingrédients :</strong> {cocktail.ingredients.join(", ")}</p>
             <p><strong>Recette :</strong> {cocktail.recipe}</p>
