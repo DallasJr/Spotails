@@ -1,7 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/User");
+const verifyAuth = require("../middleware/verifyAuth");
 const verifyAdmin = require('../middleware/verifyAdmin');
+const userController = require("../controllers/userController");
+const User = require("../models/User");
+
+router.put("/update-password", verifyAuth, userController.updatePassword);
+
+router.put("/update-email", verifyAuth, userController.updateEmail);
+
+router.put("/update-username", verifyAuth, userController.updateUsername);
+
+router.delete("/delete-account", verifyAuth, userController.deleteAccount);
+
+router.get("/me", verifyAuth, userController.retrieveAccount);
 
 router.get("/", async (req, res) => {
     const users = await User.find();

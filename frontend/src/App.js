@@ -14,6 +14,7 @@ import AdminCocktailManager from "./pages/AdminCocktailManager";
 import AdminUserManager from "./pages/AdminUserManager";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminCocktailForm from "./pages/AdminCocktailForm";
+import AccountPage from "./pages/AccountPage";
 
 function App() {
   return (
@@ -32,6 +33,14 @@ function App() {
                           element={
                               <PrivateRoute>
                                   <FavoritesPage />
+                              </PrivateRoute>
+                          }
+                      />
+                      <Route
+                          path="/account"
+                          element={
+                              <PrivateRoute>
+                                  <AccountPage />
                               </PrivateRoute>
                           }
                       />
