@@ -89,3 +89,34 @@ exports.retrieveAccount = async (req, res) => {
         res.status(500).json({ message: "Erreur serveur.", error: err.message });
     }
 };
+
+exports.updateRole = async (req, res) => {
+    const { role } = req.body;
+    if (!role || !['user', 'admin'].includes(role)) {
+        return res.status(400).json({ message: "Rôle invalide." });
+    }
+    try {
+        const updatedUser = await User.findByIdAndUpdate(req.params.id, { role }, { new: true });
+        if (!updatedUser) {
+            return res.status(404).json({ message: "Utilisateur introuvable." });
+        }
+        res.json({ message: "Rôle mis à jour", user: updatedUser });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Erreur lors de la mise à jour du rôle.", error: err.message });
+    }
+};
+
+exports.resetPassword = async (req, res) => {
+    const { newPassword } = req.body;
+    if (!newPassword) {
+        return res.status(400).json({ message: "Nouveau mot de passe requis." });
+    }
+    const user = await User.findById(req.params.id);
+    if (!user) {
+        return res.status(404).json({ message: "Utilisateur introuvable." });
+    }
+    user.password = newPassword;
+    await user.save();
+    res.json({ message: "Mot de passe réinitialisé." });
+};

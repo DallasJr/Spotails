@@ -25,10 +25,8 @@ router.delete("/:id", verifyAdmin, async (req, res) => {
     res.json({ message: "Utilisateur supprimé" });
 });
 
-router.put("/:id", verifyAdmin, async (req, res) => {
-    const { role } = req.body;
-    await User.findByIdAndUpdate(req.params.id, { role });
-    res.json({ message: "Rôle mis à jour" });
-});
+router.put("/:id/role", verifyAuth, verifyAdmin, userController.updateRole);
+
+router.put("/:id/password", verifyAuth, verifyAdmin, userController.resetPassword);
 
 module.exports = router;

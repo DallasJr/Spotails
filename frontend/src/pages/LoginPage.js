@@ -17,13 +17,12 @@ const LoginForm = () => {
                 email,
                 password,
             });
-
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("username", response.data.username);
 
             navigate("/");
         } catch (err) {
-            setError("Email ou mot de passe incorrect");
+            setError("E-mail ou mot de passe incorrect");
         }
     };
 
@@ -34,7 +33,7 @@ const LoginForm = () => {
                 <form onSubmit={handleSubmit} className="w-50 mx-auto">
                     {error && <div className="alert alert-danger">{error}</div>}
                     <div className="mb-3">
-                        <label htmlFor="email" className="form-label">Email</label>
+                        <label htmlFor="email" className="form-label">E-mail</label>
                         <input
                             type="email"
                             className="form-control"
