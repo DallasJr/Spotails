@@ -4,7 +4,6 @@ import AdminRoute from "./components/AdminRoute";
 import CocktailList from "./pages/CocktailList";
 import CocktailDetail from "./pages/CocktailDetail";
 import LandingPage from "./pages/LandingPage";
-import LoginForm from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -15,6 +14,8 @@ import AdminUserManager from "./pages/AdminUserManager";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminCocktailForm from "./pages/AdminCocktailForm";
 import AccountPage from "./pages/AccountPage";
+import PublicRoute from "./components/PublicRoute";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
@@ -26,18 +27,28 @@ function App() {
                       <Route path="/" element={<LandingPage />} />
                       <Route path="/cocktails" element={<CocktailList />} />
                       <Route path="/cocktails/:id" element={<CocktailDetail />} />
-                      <Route path="/login" element={<LoginForm />} />
-                      <Route path="/register" element={<RegisterPage />} />
-                      <Route
-                          path="/favorites"
+                      <Route path="/login"
+                          element={
+                             <PublicRoute>
+                                 <LoginPage/>
+                             </PublicRoute>
+                          }
+                      />
+                      <Route path="/register"
+                          element={
+                              <PublicRoute>
+                                  <RegisterPage />
+                              </PublicRoute>
+                          }
+                      />
+                      <Route path="/favorites"
                           element={
                               <PrivateRoute>
                                   <FavoritesPage />
                               </PrivateRoute>
                           }
                       />
-                      <Route
-                          path="/account"
+                      <Route path="/account"
                           element={
                               <PrivateRoute>
                                   <AccountPage />
@@ -45,40 +56,35 @@ function App() {
                           }
                       />
                       <Route path="*" element={<NotFoundPage />} />
-                      <Route
-                          path="/admin"
+                      <Route path="/admin"
                           element={
                               <AdminRoute>
                                   <AdminDashboard />
                               </AdminRoute>
                           }
                       />
-                      <Route
-                          path="/admin/cocktails"
+                      <Route path="/admin/cocktails"
                           element={
                               <AdminRoute>
                                   <AdminCocktailManager />
                               </AdminRoute>
                           }
                       />
-                      <Route
-                          path="/admin/users"
+                      <Route path="/admin/users"
                           element={
                               <AdminRoute>
                                   <AdminUserManager />
                               </AdminRoute>
                           }
                       />
-                      <Route
-                          path="/admin/cocktails/add"
+                      <Route path="/admin/cocktails/add"
                           element={
                               <AdminRoute>
                                   <AdminCocktailForm />
                               </AdminRoute>
                           }
                       />
-                      <Route
-                          path="/admin/cocktails/edit/:id"
+                      <Route path="/admin/cocktails/edit/:id"
                           element={
                               <AdminRoute>
                                   <AdminCocktailForm />
@@ -87,7 +93,7 @@ function App() {
                       />
                   </Routes>
               </div>
-              <Footer /> {}
+              <Footer />
           </div>
       </Router>
   );

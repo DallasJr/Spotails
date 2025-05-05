@@ -137,37 +137,44 @@ const AdminCocktailForm = () => {
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
                                     <label className="form-label">Nom</label>
-                                    <input type="text" className="form-control" name="name" value={form.name} onChange={handleChange} required />
+                                    <input type="text" className="form-control" name="name" value={form.name}
+                                           onChange={handleChange} required/>
                                 </div>
 
                                 <div className="mb-3">
                                     <label className="form-label">Thème</label>
-                                    <input type="text" className="form-control" name="theme" value={form.theme} onChange={handleChange} required />
-                                </div>
-
-                                <div className="mb-3">
-                                    <label className="form-label">Ingrédients (séparés par des virgules)</label>
-                                    <textarea className="form-control" name="ingredients" value={form.ingredients} onChange={handleChange} rows="2" required />
-                                </div>
-
-                                <div className="mb-3">
-                                    <label className="form-label">Recette</label>
-                                    <textarea className="form-control" name="recipe" value={form.recipe} onChange={handleChange} rows="3" required />
+                                    <input type="text" className="form-control" name="theme" value={form.theme}
+                                           onChange={handleChange} required/>
                                 </div>
 
                                 <div className="mb-3">
                                     <label className="form-label">Description</label>
-                                    <textarea className="form-control" name="description" value={form.description} onChange={handleChange} rows="2" required />
+                                    <textarea className="form-control" name="description" value={form.description}
+                                              onChange={handleChange} rows="2" required/>
+                                </div>
+
+                                <div className="mb-3">
+                                    <label className="form-label">Ingrédients (séparés par des virgules)</label>
+                                    <textarea className="form-control" name="ingredients" value={form.ingredients}
+                                              onChange={handleChange} rows="2" required/>
+                                </div>
+
+                                <div className="mb-3">
+                                    <label className="form-label">Recette</label>
+                                    <textarea className="form-control" name="recipe" value={form.recipe}
+                                              onChange={handleChange} rows="3" required/>
                                 </div>
 
                                 <div className="mb-3">
                                     <label className="form-label">Couleur associée</label>
-                                    <input type="color" className="form-control form-control-color" name="color" value={form.color} onChange={handleChange} />
+                                    <input type="color" className="form-control form-control-color" name="color"
+                                           value={form.color} onChange={handleChange}/>
                                 </div>
 
                                 <div className="mb-4">
                                     <label className="form-label">Image</label>
-                                    <input type="file" className="form-control" accept="image/*" name="image" onChange={handleFileChange} {...(!id && { required: true })} />
+                                    <input type="file" className="form-control" accept="image/*" name="image"
+                                           onChange={handleFileChange} {...(!id && {required: true})} />
                                 </div>
 
                                 <button type="submit" className="btn btn-success d-block mx-auto px-5">
