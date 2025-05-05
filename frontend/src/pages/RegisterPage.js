@@ -91,7 +91,8 @@ const RegisterPage = () => {
                             className="btn display-pw-btn"
                             onClick={() => setShowPassword(!showPassword)}
                         >
-                            {showPassword ? <i className="bi bi-eye-fill me-1"></i> : <i className="bi bi-eye-slash-fill me-1"></i>}
+                            {showPassword ? <i className="bi bi-eye-fill me-1"></i> :
+                                <i className="bi bi-eye-slash-fill me-1"></i>}
                         </button>
                     </div>
                 </div>
@@ -108,6 +109,11 @@ const RegisterPage = () => {
                     />
                 </div>
                 <button type="submit" className="btn submit-btn w-100">S'inscrire</button>
+                <div className="text-center mt-3">
+                    <small>
+                        Vous avez déjà un compte ? <a href="/login">Connectez-vous ici</a>
+                    </small>
+                </div>
             </form>
         </div>
     );

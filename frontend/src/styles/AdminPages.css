@@ -15,6 +15,11 @@
     background-color: #1ED760;
 }
 
+.managing-panel input {
+    border-radius: 20px;
+    padding-left: 20px;
+}
+
 .btn-dark {
     background-color: #121212;
     color: white;

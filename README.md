@@ -39,7 +39,7 @@ Spotails est un site dédié à l'art du cocktail, inspiré par l'univers musica
 5. **Gestion des Utilisateurs (Admin)** :
     - **Inscription/Connexion des utilisateurs** via un système sécurisé avec JWT.
     - L'admin peut gérer les utilisateurs inscrits :
-        - **Consulter** la liste des utilisateurs.
+        - **Consulter** la liste des utilisateurs. (avec barre de recherche)
         - **Réinitialiser** les mots de passe des utilisateurs en cas de besoin.
         - **Supprimer des utilisateurs** si nécessaire.
 

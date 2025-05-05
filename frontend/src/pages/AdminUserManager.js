@@ -6,6 +6,7 @@ import { processError } from '../utils/errorUtils';
 
 const AdminUserManager = () => {
     const [users, setUsers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         fetchUsers();
@@ -83,10 +84,26 @@ const AdminUserManager = () => {
         }
     };
 
+    const filteredUsers = users.filter(user =>
+        user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <div className="managing-panel">
             <div className="container pt-5 pb-5">
                 <h2>Gestion des Utilisateurs</h2>
+
+                <div className="mb-4 mt-3">
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Rechercher par pseudo ou e-mail..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </div>
+
                 <table className="table table-striped mt-4">
                     <thead>
                     <tr>
@@ -97,7 +114,7 @@ const AdminUserManager = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {users.map(user => (
+                    {filteredUsers.map(user => (
                         <tr key={user._id}>
                             <td>{user.username}</td>
                             <td>{user.email}</td>

@@ -46,3 +46,7 @@
     background: #137e39 !important;
     border-color: transparent !important;
 }
+
+.auth-form small {
+    color: #c5c5c5;
+}
