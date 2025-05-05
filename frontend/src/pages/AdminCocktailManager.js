@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { processError } from '../utils/errorUtils';
+import {Link} from "react-router-dom";
 
 const AdminCocktailManager = () => {
     const [cocktails, setCocktails] = useState([]);
@@ -33,9 +34,9 @@ const AdminCocktailManager = () => {
             <div className="container pt-5 pb-5">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <h2 className="m-0">Gestion des Cocktails</h2>
-                    <a href="/admin/cocktails/add" className="btn btn-sm btn-dark">
+                    <Link to="/admin/cocktails/add" className="btn btn-sm btn-dark">
                         <i className="bi bi-plus-circle"></i> Ajouter un cocktail
-                    </a>
+                    </Link>
                 </div>
                 <table className="table table-striped mt-4">
                     <thead>
@@ -51,12 +52,12 @@ const AdminCocktailManager = () => {
                             <td>{cocktail.name}</td>
                             <td>{cocktail.theme}</td>
                             <td>
-                                <a href={`/cocktails/${cocktail._id}`} className="btn btn-sm btn-info me-2">
+                                <Link to={`/cocktails/${cocktail._id}`} className="btn btn-sm btn-info me-2">
                                     <i className="bi bi-eye"></i>
-                                </a>
-                                <a href={`/admin/cocktails/edit/${cocktail._id}`} className="btn btn-sm btn-warning me-2">
+                                </Link>
+                                <Link to={`/admin/cocktails/edit/${cocktail._id}`} className="btn btn-sm btn-warning me-2">
                                     <i className="bi bi-pencil"></i>
-                                </a>
+                                </Link>
                                 <button
                                     className="btn btn-sm btn-danger"
                                     onClick={() => handleDelete(cocktail._id)}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import "../styles/FormPage.css";
 
 const RegisterPage = () => {
@@ -111,7 +111,7 @@ const RegisterPage = () => {
                 <button type="submit" className="btn submit-btn w-100">S'inscrire</button>
                 <div className="text-center mt-3">
                     <small>
-                        Vous avez déjà un compte ? <a href="/login">Connectez-vous ici</a>
+                        Vous avez déjà un compte ? <Link to="/login">Connectez-vous ici</Link>
                     </small>
                 </div>
             </form>
