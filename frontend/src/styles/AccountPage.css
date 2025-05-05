@@ -8,22 +8,21 @@
 
 .onglets {
     background-color: white;
-    padding: 10px;
-    border-radius: 5px !important;
+    border-radius: 20px !important;
     box-shadow: rgba(0, 0, 0, 0.16) 0 1px 4px;
 }
 
 .onglet {
     background-color: white;
-    padding: 10px;
-    border-radius: 5px;
+    border-radius: 20px;
     box-shadow: rgba(0, 0, 0, 0.16) 0 1px 4px;
 }
 
 .active {
     background-color: #1ED760 !important;
-    border-radius: 5px !important;
+    border-radius: 15px !important;
     border: none;
+    box-shadow: rgba(0, 0, 0, 0.16) 0 1px 4px;
 }
 
 .list-group-item-action {
@@ -35,6 +34,6 @@
     color: #1ED760 !important;
 }
 
-.form-label {
-    color: black !important;
+.panel-compte input {
+    border-radius: 20px;
 }

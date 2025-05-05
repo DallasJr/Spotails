@@ -1,4 +1,5 @@
-import React from "react";
+import { useEffect } from "react";
+import axios from '../axiosConfig';
 import {Link, useNavigate} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -16,6 +17,33 @@ const Navbar = () => {
         const decodedToken = jwtDecode(token);
         isAdmin = decodedToken.role === "admin";
     }
+
+    useEffect(() => {
+        const checkRole = async () => {
+            try {
+                const res = await axios.get("http://localhost:5000/api/users/me", {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                if (res.data.role !== jwtDecode(token).role) {
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("username");
+                    navigate("/login");
+                    window.location.reload();
+                }
+            } catch (err) {
+                localStorage.removeItem("token");
+                localStorage.removeItem("username");
+                navigate("/login");
+                window.location.reload();
+            }
+        };
+
+        if (token) {
+            checkRole();
+        }
+    }, [token, navigate]);
 
     const handleLogout = () => {
         localStorage.removeItem("token");

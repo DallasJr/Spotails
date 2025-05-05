@@ -74,6 +74,7 @@ const CocktailDetail = () => {
             <p><strong>Ingrédients :</strong> {cocktail.ingredients.join(", ")}</p>
             <p><strong>Recette :</strong> {cocktail.recipe}</p>
             <p><strong>Description :</strong> {cocktail.description}</p>
+            <p><strong>Color :</strong> {cocktail.color}</p>
             <button className="btn btn-outline-warning mt-3" onClick={handleFavoriteToggle}>
                 <i className={`bi ${isFavorite ? "bi-star-fill" : "bi-star"}`}></i>
                 {" "} {isFavorite ? "Favori" : "Ajouter aux favoris"}

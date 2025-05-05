@@ -158,7 +158,7 @@ const AccountPage = () => {
                 <h1 className="text-center mb-4">Votre compte</h1>
                 <div className="row">
                     <div className="col-md-3">
-                        <div className="list-group onglets">
+                        <div className="list-group onglets p-2">
                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                             <a
                                 href="#"
@@ -184,7 +184,7 @@ const AccountPage = () => {
 
                     <div className="col-md-9">
                         {activeTab === "account" && (
-                            <div className="onglet">
+                            <div className="onglet p-3">
                                 <h5>PARAMÈTRES DU COMPTE</h5>
                                 {error && <div className="alert alert-danger">{error}</div>}
                                 {successMessage && <div className="alert alert-success">{successMessage}</div>}
@@ -235,7 +235,7 @@ const AccountPage = () => {
                         )}
 
                         {activeTab === "security" && (
-                            <div className="onglet">
+                            <div className="onglet p-3">
                                 <h5>SÉCURITÉ</h5>
                                 {error && <div className="alert alert-danger">{error}</div>}
                                 {successMessage && <div className="alert alert-success">{successMessage}</div>}

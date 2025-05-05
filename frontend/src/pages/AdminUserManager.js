@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import {jwtDecode} from "jwt-decode";
+import { processError } from '../utils/errorUtils';
 
 const AdminUserManager = () => {
     const [users, setUsers] = useState([]);
@@ -16,7 +18,7 @@ const AdminUserManager = () => {
             });
             setUsers(res.data);
         } catch (error) {
-            console.error("Erreur lors du chargement des utilisateurs", error);
+            processError(error);
         }
     };
 
@@ -28,7 +30,7 @@ const AdminUserManager = () => {
                 });
                 fetchUsers();
             } catch (error) {
-                console.error("Erreur lors de la suppression de l'utilisateur", error);
+                processError(error);
             }
         }
     };
@@ -39,9 +41,20 @@ const AdminUserManager = () => {
                 await axios.put(`http://localhost:5000/api/users/${id}/role`, { role: newRole }, {
                     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
                 });
+                const token = localStorage.getItem("token");
+                if (token) {
+                    const decoded = jwtDecode(token);
+                    if (decoded.id === id) {
+                        alert("Votre rôle a été modifié. Vous allez être déconnecté.");
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("username");
+                        window.location.href = "/login";
+                        return;
+                    }
+                }
                 fetchUsers();
             } catch (error) {
-                console.error("Erreur lors de la modification du rôle", error);
+                processError(error);
             }
         }
     };
@@ -65,7 +78,7 @@ const AdminUserManager = () => {
                 await navigator.clipboard.writeText(newPassword);
                 alert("Nouveau mot de passe copié dans le presse-papier.");
             } catch (error) {
-                console.error("Erreur lors de la réinitialisation du mot de passe", error);
+                processError(error);
             }
         }
     };

@@ -46,12 +46,12 @@ const RegisterPage = () => {
     };
 
     return (
-        <div className="container mt-5">
+        <div className="auth-form container mt-5">
             <h1 className="text-center mb-4">Inscription</h1>
             <form onSubmit={handleSubmit} className="w-50 mx-auto">
                 {error && <div className="alert alert-danger">{error}</div>}
                 <div className="mb-3">
-                    <label htmlFor="username" className="form-label">Nom d'utilisateur</label>
+                    <label htmlFor="username" className="mb-1">Nom d'utilisateur</label>
                     <input
                         type="text"
                         className="form-control"
@@ -63,7 +63,7 @@ const RegisterPage = () => {
                     />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="email" className="form-label">Email</label>
+                    <label htmlFor="email" className="mb-1">Email</label>
                     <input
                         type="email"
                         className="form-control"
@@ -75,7 +75,7 @@ const RegisterPage = () => {
                     />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="password" className="form-label">Mot de passe</label>
+                    <label htmlFor="password" className="mb-1">Mot de passe</label>
                     <div className="input-group">
                         <input
                             type={showPassword ? "text" : "password"}
@@ -88,7 +88,7 @@ const RegisterPage = () => {
                         />
                         <button
                             type="button"
-                            className="btn"
+                            className="btn display-pw-btn"
                             onClick={() => setShowPassword(!showPassword)}
                         >
                             {showPassword ? <i className="bi bi-eye-fill"></i> : <i className="bi bi-eye-slash-fill"></i>}
@@ -96,7 +96,7 @@ const RegisterPage = () => {
                     </div>
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="confirmPassword" className="form-label">Confirmer le mot de passe</label>
+                    <label htmlFor="confirmPassword" className="mb-1">Confirmer le mot de passe</label>
                     <input
                         type="password"
                         className="form-control"
@@ -107,7 +107,7 @@ const RegisterPage = () => {
                         required
                     />
                 </div>
-                <button type="submit" className="btn w-100">S'inscrire</button>
+                <button type="submit" className="btn submit-btn w-100">S'inscrire</button>
             </form>
         </div>
     );

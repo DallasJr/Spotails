@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { processError } from '../utils/errorUtils';
 
 const AdminCocktailManager = () => {
     const [cocktails, setCocktails] = useState([]);
@@ -16,20 +17,26 @@ const AdminCocktailManager = () => {
 
     const handleDelete = async (id) => {
         if (window.confirm("Supprimer ce cocktail ?")) {
-            await axios.delete(`http://localhost:5000/api/cocktails/${id}`,
-                { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-            );
-            fetchCocktails();
+            try {
+                await axios.delete(`http://localhost:5000/api/cocktails/${id}`,
+                    { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+                );
+                fetchCocktails();
+            } catch (error) {
+                processError(error);
+            }
         }
     };
 
     return (
         <div className="managing-panel">
             <div className="container pt-5 pb-5">
-                <h2>Gestion des Cocktails</h2>
-                <a href="/admin/cocktails/add" className="btn btn-primary mb-3">
-                    <i className="bi bi-plus-circle"></i> Ajouter un cocktail
-                </a>
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                    <h2 className="m-0">Gestion des Cocktails</h2>
+                    <a href="/admin/cocktails/add" className="btn btn-sm btn-dark">
+                        <i className="bi bi-plus-circle"></i> Ajouter un cocktail
+                    </a>
+                </div>
                 <table className="table table-striped mt-4">
                     <thead>
                     <tr>

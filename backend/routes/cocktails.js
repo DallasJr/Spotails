@@ -36,7 +36,7 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", verifyAdmin, upload.single("image"), async (req, res) => {
     try {
-        const { name, ingredients, recipe, theme, description } = req.body;
+        const { name, ingredients, recipe, theme, description, color } = req.body;
         if (!name || !req.file || !ingredients || !recipe || !theme || !description) {
             return res.status(400).json({ message: 'Tous les champs sont requis.' });
         }
@@ -47,6 +47,7 @@ router.post("/", verifyAdmin, upload.single("image"), async (req, res) => {
             recipe,
             theme,
             description,
+            color: color || "#13a444"
         });
 
         await newCocktail.save();

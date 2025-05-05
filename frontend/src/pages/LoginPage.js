@@ -27,13 +27,13 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="login-form mt-5 p-5">
+        <div className="auth-form mt-5 p-5">
             <div className="container">
                 <h1 className="text-center mb-4">Connexion</h1>
                 <form onSubmit={handleSubmit} className="w-50 mx-auto">
                     {error && <div className="alert alert-danger">{error}</div>}
                     <div className="mb-3">
-                        <label htmlFor="email" className="form-label">E-mail</label>
+                        <label htmlFor="email" className="mb-1">E-mail</label>
                         <input
                             type="email"
                             className="form-control"
@@ -45,7 +45,7 @@ const LoginForm = () => {
                         />
                     </div>
                     <div className="mb-3">
-                        <label htmlFor="password" className="form-label">Mot de passe</label>
+                        <label htmlFor="password" className="mb-1">Mot de passe</label>
                         <div className="input-group">
                             <input
                                 type={showPassword ? "text" : "password"}
@@ -58,14 +58,14 @@ const LoginForm = () => {
                             />
                             <button
                                 type="button"
-                                className="btn"
+                                className="btn display-pw-btn"
                                 onClick={() => setShowPassword(!showPassword)}
                             >
                                 {showPassword ? <i className="bi bi-eye-fill"></i> : <i className="bi bi-eye-slash-fill"></i>}
                             </button>
                         </div>
                     </div>
-                    <button type="submit" className="btn w-100">Se connecter</button>
+                    <button type="submit" className="btn submit-btn w-100">Se connecter</button>
                 </form>
             </div>
         </div>
