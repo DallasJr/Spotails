@@ -1,6 +1,6 @@
-# Spotail - Cocktail Music Experience
+# Spotails - Cocktail Music Experience
 
-Spotail est un site dédié à l'art du cocktail, inspiré par l'univers musical. Le site permet aux utilisateurs de découvrir une variété de cocktails soigneusement sélectionnés, tout en étant immergés dans un univers visuel dynamique, où chaque cocktail est lié à une thématique musicale. En utilisant **Spotail**, les utilisateurs peuvent consulter des informations détaillées sur chaque cocktail, incluant des images, des ingrédients, des recettes et bien plus.
+Spotails est un site dédié à l'art du cocktail, inspiré par l'univers musical. Le site permet aux utilisateurs de découvrir une variété de cocktails soigneusement sélectionnés, tout en étant immergés dans un univers visuel dynamique, où chaque cocktail est lié à une thématique musicale. En utilisant **Spotail**, les utilisateurs peuvent consulter des informations détaillées sur chaque cocktail, incluant des images, des ingrédients, des recettes et bien plus.
 
 ## Technologies Utilisées
 
@@ -19,7 +19,7 @@ Spotail est un site dédié à l'art du cocktail, inspiré par l'univers musical
 ### Fonctionnalités
 
 1. **Page d'Accueil (Landing Page)** :
-    - Page designée présentant l'application Spotail et promouvant les cocktails thématiques.
+    - Page designée présentant l'application Spotails et promouvant les cocktails thématiques.
     - **Framer Motion** est utilisé pour les animations de cette page.
 
 2. **Page Liste des Cocktails** :
@@ -59,7 +59,7 @@ Spotail est un site dédié à l'art du cocktail, inspiré par l'univers musical
 1. Clonez ce repository sur votre machine.
    ```bash
    git clone https://github.com/DallasJr/Spotails.git
-   cd spotail
+   cd spotails
    ```
 
 2. Installez les dépendances pour le backend :
