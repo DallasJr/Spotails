@@ -91,7 +91,7 @@ const RegisterPage = () => {
                             className="btn display-pw-btn"
                             onClick={() => setShowPassword(!showPassword)}
                         >
-                            {showPassword ? <i className="bi bi-eye-fill"></i> : <i className="bi bi-eye-slash-fill"></i>}
+                            {showPassword ? <i className="bi bi-eye-fill me-1"></i> : <i className="bi bi-eye-slash-fill me-1"></i>}
                         </button>
                     </div>
                 </div>
