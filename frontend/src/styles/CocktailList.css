@@ -5,3 +5,63 @@ body {
 .btn {
     border-radius: 20px;
 }
+
+.cocktail-theme {
+    font-weight: bold;
+    font-size: 2rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.cocktail-description {
+    color: white;
+    font-size: 4rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.cocktail-display {
+    height: 100%;
+    min-height: 650px;
+    position: relative;
+    border-radius: 50px 0 0 50px;
+}
+
+.cocktail-main-img {
+    max-height: 80%;
+    object-fit: contain;
+    filter: drop-shadow(22px 13px 38px rgba(0, 0, 0, 0.5));
+    z-index: 2;
+}
+
+.cocktail-name {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    writing-mode: sideways-lr;
+    text-orientation: mixed;
+    font-size: 2rem;
+    font-weight: bold;
+    color: black;
+    z-index: 3;
+    max-height: 90%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    text-align: center;
+}
+
+.cocktail-thumb {
+    width: 100px;
+    min-width: 100px;
+    height: 100px;
+    object-fit: contain;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 20px;
+    transition: 0.3s;
+}
+
+.cocktail-thumb:hover {
+    border-color: #fff;
+}
