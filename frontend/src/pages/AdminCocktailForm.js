@@ -109,7 +109,7 @@ const AdminCocktailForm = () => {
                                     }}
                                 >
                                     <img
-                                        src={previewUrl || "http://localhost:5000/uploads/cocktail-placeholder.png"}
+                                        src={previewUrl || "/cocktail-placeholder.png"}
                                         alt="Cocktail"
                                         className="img-fluid rounded"
                                         style={{ maxHeight: "160px", objectFit: "contain" }}

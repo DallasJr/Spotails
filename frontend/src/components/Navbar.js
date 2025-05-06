@@ -70,9 +70,6 @@ const Navbar = () => {
                     </Link>
                     {isAuthenticated ? (
                         <>
-                            <Link to="/favorites" className="navbar-link navbar-link-fav me-4">
-                                <i className="bi bi-heart"></i>
-                            </Link>
                             <Link to="/account" className="navbar-link me-4">
                                 <i className="bi bi-person-fill me-1"></i>
                                 {username}

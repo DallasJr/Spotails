@@ -7,7 +7,6 @@ import LandingPage from "./pages/LandingPage";
 import RegisterPage from "./pages/RegisterPage";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import FavoritesPage from "./pages/FavoritesPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import AdminCocktailManager from "./pages/AdminCocktailManager";
 import AdminUserManager from "./pages/AdminUserManager";
@@ -39,13 +38,6 @@ function App() {
                               <PublicRoute>
                                   <RegisterPage />
                               </PublicRoute>
-                          }
-                      />
-                      <Route path="/favorites"
-                          element={
-                              <PrivateRoute>
-                                  <FavoritesPage />
-                              </PrivateRoute>
                           }
                       />
                       <Route path="/account"
