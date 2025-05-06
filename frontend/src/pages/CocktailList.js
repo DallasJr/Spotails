@@ -5,9 +5,14 @@ import { Link } from "react-router-dom";
 const CocktailList = () => {
     const [cocktails, setCocktails] = useState([]);
     const [selectedCocktail, setSelectedCocktail] = useState(null);
+    const [favoriteIds, setFavoriteIds] = useState([]);
+    const [displayAnimation, setDisplayAnimation] = useState("animate-in");
+    const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
     useEffect(() => {
         fetchCocktails();
+        const token = localStorage.getItem("token");
+        if (token) fetchFavorites();
     }, []);
 
     const fetchCocktails = async () => {
@@ -16,8 +21,51 @@ const CocktailList = () => {
         setSelectedCocktail(res.data[0]);
     };
 
+    const fetchFavorites = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const res = await axios.get("http://localhost:5000/api/favorites", {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setFavoriteIds(res.data.map(fav => fav._id));
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const handleFavoriteToggle = async () => {
+        const token = localStorage.getItem("token");
+        if (!token) return alert("Connecte-toi pour ajouter aux favoris");
+
+        try {
+            if (favoriteIds.includes(selectedCocktail._id)) {
+                await axios.delete(
+                    `http://localhost:5000/api/favorites/remove/${selectedCocktail._id}`,
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+                setFavoriteIds(favoriteIds.filter(id => id !== selectedCocktail._id));
+            } else {
+                await axios.post(
+                    `http://localhost:5000/api/favorites/add/${selectedCocktail._id}`,
+                    {},
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+                setFavoriteIds([...favoriteIds, selectedCocktail._id]);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+
     const handleSelect = (cocktail) => {
-        setSelectedCocktail(cocktail);
+        if (selectedCocktail && cocktail._id === selectedCocktail._id) return;
+
+        setDisplayAnimation("animate-out");
+        setTimeout(() => {
+            setSelectedCocktail(cocktail);
+            setDisplayAnimation("animate-in");
+        }, 400);
     };
 
     return (
@@ -26,13 +74,23 @@ const CocktailList = () => {
                 <div className="col-md-6 d-flex flex-column justify-content-center p-5">
                     {selectedCocktail && (
                         <>
-                            <h2 className="cocktail-theme mb-4" style={{ color: selectedCocktail.color }}>
+                            <h2 className="cocktail-theme mb-4" style={{color: selectedCocktail.color}}>
                                 {selectedCocktail.theme}
                             </h2>
                             <h1 className="cocktail-description mb-4">{selectedCocktail.description}</h1>
-                            <div className="mt-4">
-                                <Link to={`/cocktails/${selectedCocktail._id}`} className="btn btn-light me-3" style={{ backgroundColor: selectedCocktail.color, borderColor: selectedCocktail.color }}>En savoir plus</Link>
-                                <button className="btn btn-outline-warning">Favori</button>
+                            <div className="mt-4 d-flex flex-wrap justify-content-md-start justify-content-center">
+                                <Link to={`/cocktails/${selectedCocktail._id}`} className="btn btn-light me-4 mb-sm-3 mb-3"
+                                      style={{
+                                          backgroundColor: selectedCocktail.color,
+                                          borderColor: selectedCocktail.color
+                                      }}>En savoir plus</Link>
+                                <button
+                                    className={`btn btn-outline-warning mb-sm-3 mb-3`}
+                                    onClick={handleFavoriteToggle}
+                                >
+                                    <i className={`bi ${favoriteIds.includes(selectedCocktail._id) ? "bi-star-fill" : "bi-star"}`}></i>
+                                    {" "} {favoriteIds.includes(selectedCocktail._id) ? "Favori" : "Ajouter aux favoris"}
+                                </button>
                             </div>
                         </>
                     )}
@@ -40,9 +98,10 @@ const CocktailList = () => {
 
                 <div className="col-md-6 position-relative p-0">
                     {selectedCocktail && (
-                        <div className="cocktail-display d-flex align-items-center justify-content-center"
-                             style={{ backgroundColor: selectedCocktail.color }}>
-                            <img src={`http://localhost:5000/uploads/${selectedCocktail.image}`} alt={selectedCocktail.name} className="cocktail-main-img" />
+                        <div className={`cocktail-display d-flex align-items-center justify-content-center ${displayAnimation}`}
+                             style={{backgroundColor: selectedCocktail.color}}>
+                            <img src={`http://localhost:5000/uploads/${selectedCocktail.image}`}
+                                 alt={selectedCocktail.name} className="cocktail-main-img"/>
                             <div className="cocktail-name">{selectedCocktail.name.toUpperCase()}</div>
                         </div>
                     )}
@@ -51,19 +110,41 @@ const CocktailList = () => {
 
             <div className="row mt-3">
                 <div className="col d-flex align-items-center">
-                    <div className="d-flex overflow-auto">
-                        {cocktails.map((cocktail) => (
-                            <img
+                    <div className="d-flex align-items-center ms-2 me-4 ms-lg-5 ms-md-5 ms-sm-2 me-md-3 me-lg-3 me-sm-4">
+                       <span
+                           onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+                           style={{cursor: "pointer", fontSize: "2rem"}}
+                           className="text-warning star-filter"
+                       >
+                          <i className={`bi ${showFavoritesOnly ? "bi-star-fill" : "bi-star"}`}></i>
+                        </span>
+                    </div>
+                    <div className="d-flex overflow-auto cocktails-listing">
+                        {cocktails
+                            .filter(cocktail => !showFavoritesOnly || favoriteIds.includes(cocktail._id))
+                            .map((cocktail) => (
+                            <div
                                 key={cocktail._id}
-                                src={`http://localhost:5000/uploads/${cocktail.image}`}
-                                alt={cocktail.name}
-                                className="cocktail-thumb me-2"
+                                className="position-relative me-3"
                                 onClick={() => handleSelect(cocktail)}
-                                style={{ backgroundColor: cocktail.color,
-                                    border: selectedCocktail && selectedCocktail._id === cocktail._id
-                                        ? "4px solid white"
-                                        : "", }}
-                            />
+                                style={{cursor: "pointer"}}
+                            >
+                                <img
+                                    src={`http://localhost:5000/uploads/${cocktail.image}`}
+                                    alt={cocktail.name}
+                                    className="cocktail-thumb"
+                                    style={{
+                                        backgroundColor: cocktail.color,
+                                        border:
+                                            selectedCocktail && selectedCocktail._id === cocktail._id
+                                                ? "4px solid white"
+                                                : "",
+                                    }}
+                                />
+                                {favoriteIds.includes(cocktail._id) && (
+                                    <span className="favorite-star">★</span>
+                                )}
+                            </div>
                         ))}
                     </div>
                 </div>

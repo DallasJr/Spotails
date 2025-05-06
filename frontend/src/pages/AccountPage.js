@@ -158,7 +158,7 @@ const AccountPage = () => {
                 <h1 className="text-center mb-4">Votre compte</h1>
                 <div className="row">
                     <div className="col-md-3">
-                        <div className="list-group onglets p-2">
+                        <div className="list-group onglets p-2 mb-3">
                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                             <a
                                 href="#"
