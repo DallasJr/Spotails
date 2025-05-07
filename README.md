@@ -23,27 +23,25 @@ Spotails est un site dédié à l'art du cocktail, inspiré par l'univers musica
     - **Framer Motion** est utilisé pour les animations de cette page.
 
 2. **Page Liste des Cocktails** :
-    - Affichage de tous les cocktails disponibles avec un système de tri pour faciliter la recherche par thème, nom, etc.
+    - Affichage de tous les cocktails disponibles avec un système de tri par favoris.
 
 3. **Page Produit d'un Cocktail** :
     - Chaque cocktail a sa propre page produit contenant :
         - **Image** du cocktail
+        - **Bannière** du cocktail
         - **Ingrédients** du cocktail
         - **Recette** détaillée
         - **Description** du cocktail
         - **Référence** à son thème
 
-4. **Page des Cocktails Préférés** :
-    - Affichage des cocktails que l'utilisateur a marqués comme favoris.
-
-5. **Gestion des Utilisateurs (Admin)** :
+4. **Gestion des Utilisateurs (Admin)** :
     - **Inscription/Connexion des utilisateurs** via un système sécurisé avec JWT.
     - L'admin peut gérer les utilisateurs inscrits :
         - **Consulter** la liste des utilisateurs. (avec barre de recherche)
         - **Réinitialiser** les mots de passe des utilisateurs en cas de besoin.
         - **Supprimer des utilisateurs** si nécessaire.
 
-6. **Gestion des Cocktails (Admin)** :
+5. **Gestion des Cocktails (Admin)** :
     - L'admin peut ajouter, modifier ou supprimer des cocktails via une interface d'administration.
     - Ajout d'images et gestion des propriétés comme le nom, le thème, les ingrédients, la recette, etc.
 

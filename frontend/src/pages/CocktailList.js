@@ -71,9 +71,13 @@ const CocktailList = () => {
     return (
         <div className="container-fluid py-4 cocktail-list">
             <div className="row g-0 d-flex align-items-stretch">
-                <div className="col-md-6 d-flex flex-column justify-content-center p-5">
+                <div className="col-md-6 d-flex flex-column justify-content-center py-5 pe-4">
                     {selectedCocktail && (
-                        <>
+                        <div className={`cocktail-infos ${displayAnimation}`}
+                            style={{
+                                backgroundImage: `url(http://localhost:5000/uploads/${selectedCocktail.thumbnail})`,
+                                backgroundSize: "cover"
+                            }}>
                             <h2 className="cocktail-theme mb-4" style={{color: selectedCocktail.color}}>
                                 {selectedCocktail.theme}
                             </h2>
@@ -92,7 +96,7 @@ const CocktailList = () => {
                                     {" "} {favoriteIds.includes(selectedCocktail._id) ? "Favori" : "Ajouter aux favoris"}
                                 </button>
                             </div>
-                        </>
+                        </div>
                     )}
                 </div>
 
@@ -134,11 +138,12 @@ const CocktailList = () => {
                                     alt={cocktail.name}
                                     className="cocktail-thumb"
                                     style={{
-                                        backgroundColor: cocktail.color,
+                                        backgroundImage: `url(http://localhost:5000/uploads/${cocktail.thumbnail})`,
                                         border:
                                             selectedCocktail && selectedCocktail._id === cocktail._id
                                                 ? "4px solid white"
                                                 : "",
+                                        backgroundSize: "cover"
                                     }}
                                 />
                                 {favoriteIds.includes(cocktail._id) && (

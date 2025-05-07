@@ -15,6 +15,11 @@ const storage = multer.diskStorage({
     },
 });
 const upload = multer({ storage });
+const multipleUpload = upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "thumbnail", maxCount: 1 },
+]);
+
 const deleteImage = (filename) => {
     const imagePath = path.join(__dirname, "../uploads", filename);
     if (fs.existsSync(imagePath)) {
@@ -34,15 +39,16 @@ router.get("/:id", async (req, res) => {
     res.json(cocktail);
 });
 
-router.post("/", verifyAdmin, upload.single("image"), async (req, res) => {
+router.post("/", verifyAdmin, multipleUpload, async (req, res) => {
     try {
         const { name, ingredients, recipe, theme, description, color } = req.body;
-        if (!name || !req.file || !ingredients || !recipe || !theme || !description) {
+        if (!name || !req.files["image"] || !req.files["thumbnail"] || !ingredients || !recipe || !theme || !description) {
             return res.status(400).json({ message: 'Tous les champs sont requis.' });
         }
         const newCocktail = new Cocktail({
             name,
-            image: req.file.filename,
+            image: req.files["image"][0].filename,
+            thumbnail: req.files["thumbnail"][0].filename,
             ingredients,
             recipe,
             theme,
@@ -57,7 +63,7 @@ router.post("/", verifyAdmin, upload.single("image"), async (req, res) => {
     }
 });
 
-router.put("/:id", verifyAdmin, upload.single("image"), async (req, res) => {
+router.put("/:id", verifyAdmin, multipleUpload, async (req, res) => {
     try {
         const cocktail = await Cocktail.findById(req.params.id);
         if (!cocktail) {
@@ -67,9 +73,14 @@ router.put("/:id", verifyAdmin, upload.single("image"), async (req, res) => {
         if (updateData.ingredients) {
             updateData.ingredients = updateData.ingredients.split(",").map(i => i.trim());
         }
-        if (req.file) {
+        if (req.files["image"]) {
             if (cocktail.image) deleteImage(cocktail.image);
-            updateData.image = req.file.filename;
+            updateData.image = req.files["image"][0].filename;
+        }
+
+        if (req.files["thumbnail"]) {
+            if (cocktail.thumbnail) deleteImage(cocktail.thumbnail);
+            updateData.thumbnail = req.files["thumbnail"][0].filename;
         }
         const updatedCocktail = await Cocktail.findByIdAndUpdate(req.params.id, updateData, { new: true });
         if (!updatedCocktail) {
@@ -87,6 +98,7 @@ router.delete("/:id", verifyAdmin, async (req, res) => {
         if (!deletedCocktail) return res.status(404).json({ message: "Cocktail introuvable." });
 
         if (deletedCocktail.image) deleteImage(deletedCocktail.image);
+        if (deletedCocktail.thumbnail) deleteImage(deletedCocktail.thumbnail);
         res.json({ message: "Cocktail supprimé." });
     } catch (err) {
         res.status(400).json({ message: "Erreur lors de la suppression." });

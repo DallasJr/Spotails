@@ -16,6 +16,8 @@ const AdminCocktailForm = () => {
 
     const [imageFile, setImageFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState("");
+    const [thumbnailFile, setThumbnailFile] = useState(null);
+    const [thumbnailUrl, setThumbnailUrl] = useState("");
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -31,9 +33,11 @@ const AdminCocktailForm = () => {
                         recipe: c.recipe,
                         description: c.description,
                         image: c.image,
+                        thumbnail: c.thumbnail,
                         color: c.color || "#13a444"
                     });
                     setPreviewUrl(`http://localhost:5000/uploads/${c.image}`);
+                    setThumbnailUrl(`http://localhost:5000/uploads/${c.thumbnail}`);
                 });
         }
     }, [id]);
@@ -47,6 +51,11 @@ const AdminCocktailForm = () => {
         setImageFile(file);
         setPreviewUrl(URL.createObjectURL(file));
     };
+    const handleThumbnailChange = (e) => {
+        const file = e.target.files[0];
+        setThumbnailFile(file);
+        setThumbnailUrl(URL.createObjectURL(file));
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -57,6 +66,7 @@ const AdminCocktailForm = () => {
         });
 
         if (imageFile) dataToSend.append("image", imageFile);
+        if (thumbnailFile) dataToSend.append("thumbnail", thumbnailFile);
 
         const config = {
             headers: {
@@ -94,27 +104,58 @@ const AdminCocktailForm = () => {
                     <div className="col-md-5">
                         <div className="card preview-card">
                             <div className="card-body text-center">
-                                <h3 className="card-title mb-3">{form.name || "Nom du cocktail"}</h3>
                                 <div
+                                    className="p-3 pb-1 mb-3 m-auto"
                                     style={{
-                                        backgroundColor: form.color,
+                                        backgroundColor: "#121212",
                                         borderRadius: "70px",
-                                        padding: "20px",
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        height: "220px",
-                                        width: "220px",
-                                        margin: "0 auto 20px"
+                                        width: "100%",
+                                        maxWidth: "300px",
+                                        boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
                                     }}
                                 >
-                                    <img
-                                        src={previewUrl || "/cocktail-placeholder.png"}
-                                        alt="Cocktail"
-                                        className="img-fluid rounded"
-                                        style={{ maxHeight: "160px", objectFit: "contain" }}
-                                    />
+                                    <h3
+                                        className="card-title mb-3 text-center"
+                                        style={{ color: form.color, fontSize: "clamp(1.2rem, 2.5vw, 1.8rem)" }}
+                                    >
+                                        {form.name || "Nom du cocktail"}
+                                    </h3>
+
+                                    <div
+                                        style={{
+                                            position: "relative",
+                                            width: "100%",
+                                            paddingTop: "100%",
+                                            backgroundImage: `url(${thumbnailUrl || "/thumbnail-placeholder.jpg"})`,
+                                            backgroundSize: "cover",
+                                            backgroundPosition: "center",
+                                            borderRadius: "60px",
+                                            borderWidth: "20px",
+                                            borderStyle: "solid",
+                                            borderColor: form.color,
+                                            overflow: "hidden",
+                                            margin: "0 auto 15px",
+                                        }}
+                                    >
+                                        <img
+                                            src={previewUrl || "/cocktail-placeholder.png"}
+                                            alt="Cocktail"
+                                            style={{
+                                                position: "absolute",
+                                                top: "50%",
+                                                left: "50%",
+                                                transform: "translate(-50%, -50%)",
+                                                maxWidth: "80%",
+                                                maxHeight: "80%",
+                                                objectFit: "contain",
+                                                borderRadius: "10px",
+                                            }}
+                                        />
+                                    </div>
                                 </div>
+
+
+
 
                                 <h5 className="text-muted">{form.theme || "Thème du cocktail"}</h5>
                                 <strong>Description :</strong>
@@ -175,6 +216,12 @@ const AdminCocktailForm = () => {
                                     <label className="form-label">Image</label>
                                     <input type="file" className="form-control" accept="image/*" name="image"
                                            onChange={handleFileChange} {...(!id && {required: true})} />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label className="form-label">Miniature</label>
+                                    <input type="file" className="form-control" accept="image/*" name="thumbnail"
+                                           onChange={handleThumbnailChange} {...(!id && {required: true})} />
                                 </div>
 
                                 <button type="submit" className="btn btn-success d-block mx-auto px-5">
