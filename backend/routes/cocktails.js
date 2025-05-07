@@ -5,13 +5,16 @@ const verifyAdmin = require('../middleware/verifyAdmin');
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const crypto = require("crypto");
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, "uploads/");
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
+        const date = Date.now();
+        const randomString = crypto.randomBytes(6).toString("hex");
+        cb(null, date + randomString + path.extname(file.originalname).toLowerCase());
     },
 });
 const upload = multer({ storage });
