@@ -71,7 +71,7 @@ const CocktailList = () => {
     return (
         <div className="container-fluid py-4 cocktail-list">
             <div className="row g-0 d-flex align-items-stretch">
-                <div className="col-md-6 d-flex flex-column justify-content-center py-5 pe-4">
+                <div className="col-md-6 d-flex flex-column justify-content-center py-3 py-md-5 pe-md-4">
                     {selectedCocktail && (
                         <div className={`cocktail-infos ${displayAnimation}`}
                             style={{
