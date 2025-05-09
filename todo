@@ -1,4 +1,5 @@
 CocktailDetail
+add public bool to cocktail model
 Tab title/favicon
 upgrade Framer
 final file
