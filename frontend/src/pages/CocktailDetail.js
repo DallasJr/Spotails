@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import {useParams} from "react-router-dom";
 import axios from "axios";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import NotFoundPage from "./NotFoundPage";
+import "../styles/CocktailDetail.css";
 
 const CocktailDetail = () => {
     const { id } = useParams();
@@ -68,17 +69,42 @@ const CocktailDetail = () => {
 
     return (
         <div className="container mt-5">
-            <h1>{cocktail.name}</h1>
-            <img src={`http://localhost:5000/uploads/${cocktail.image}`} width={300} alt={cocktail.name} />
-            <p><strong>Thème :</strong> {cocktail.theme}</p>
-            <p><strong>Ingrédients :</strong> {cocktail.ingredients.join(", ")}</p>
-            <p><strong>Recette :</strong> {cocktail.recipe}</p>
-            <p><strong>Description :</strong> {cocktail.description}</p>
-            <p><strong>Color :</strong> {cocktail.color}</p>
-            <button className="btn btn-outline-warning mt-3" onClick={handleFavoriteToggle}>
-                <i className={`bi ${isFavorite ? "bi-star-fill" : "bi-star"}`}></i>
-                {" "} {isFavorite ? "Favori" : "Ajouter aux favoris"}
-            </button>
+            <div className="d-flex flex-column">
+                <div className="px-5 pb-5 d-flex flex-column" style={{
+                    backgroundColor: cocktail.color,
+                    borderRadius: "40px"
+                }}>
+                    <h2 className="cocktail-theme my-3 m-auto">
+                        {cocktail.theme}
+                    </h2>
+                    <div className="cocktail-detail-card p-5 d-flex flex-column align-items-center justify-content-center" style={{
+                        backgroundImage: `url(http://localhost:5000/uploads/${cocktail.thumbnail})`,
+                        backgroundSize: "cover",
+                        borderRadius: "20px",
+                    }}>
+                        {isFavorite && (
+                            <span className="favorite-star-detail">★</span>
+                        )}
+                        <img src={`http://localhost:5000/uploads/${cocktail.image}`}
+                             alt={cocktail.name} className="cocktail-main-img"/>
+                        <h1 className="cocktail-name-detail mb-4">{cocktail.name}</h1>
+                        <div className="mt-4 d-flex flex-wrap justify-content-md-start justify-content-center">
+                            <button
+                                className={`btn btn-outline-warning`}
+                                onClick={handleFavoriteToggle}
+                            >
+                                <i className={`bi ${isFavorite ? "bi-star-fill" : "bi-star"}`}></i>
+                                {" "} {isFavorite ? "Favori" : "Ajouter aux favoris"}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <h1>{cocktail.description}</h1>
+                <p><strong>Ingrédients :</strong> {cocktail.ingredients.join(", ")}</p>
+                <p><strong>Recette :</strong> {cocktail.recipe}</p>
+            </div>
         </div>
     );
 };

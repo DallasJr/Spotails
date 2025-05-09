@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useMemo} from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { processError } from '../utils/errorUtils';
@@ -7,7 +7,6 @@ const AdminCocktailForm = () => {
     const [form, setForm] = useState({
         name: "",
         theme: "",
-        ingredients: "",
         recipe: "",
         description: "",
         image: "",
@@ -18,6 +17,9 @@ const AdminCocktailForm = () => {
     const [previewUrl, setPreviewUrl] = useState("");
     const [thumbnailFile, setThumbnailFile] = useState(null);
     const [thumbnailUrl, setThumbnailUrl] = useState("");
+    const [ingredientsList, setIngredientsList] = useState([
+        { name: "", quantity: "", unit: "" }
+    ]);
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -25,20 +27,20 @@ const AdminCocktailForm = () => {
         if (id) {
             axios.get(`http://localhost:5000/api/cocktails/${id}`)
                 .then(res => {
-                    const c = res.data;
-                    setForm({
-                        name: c.name,
-                        theme: c.theme,
-                        ingredients: c.ingredients.join(", "),
-                        recipe: c.recipe,
-                        description: c.description,
-                        image: c.image,
-                        thumbnail: c.thumbnail,
-                        color: c.color || "#13a444"
-                    });
-                    setPreviewUrl(`http://localhost:5000/uploads/${c.image}`);
-                    setThumbnailUrl(`http://localhost:5000/uploads/${c.thumbnail}`);
+                const c = res.data;
+                setForm({
+                    name: c.name,
+                    theme: c.theme,
+                    recipe: c.recipe,
+                    description: c.description,
+                    image: c.image,
+                    thumbnail: c.thumbnail,
+                    color: c.color || "#13a444"
                 });
+                setPreviewUrl(`http://localhost:5000/uploads/${c.image}`);
+                setThumbnailUrl(`http://localhost:5000/uploads/${c.thumbnail}`);
+                setIngredientsList(c.ingredients);
+            });
         }
     }, [id]);
 
@@ -57,25 +59,44 @@ const AdminCocktailForm = () => {
         setThumbnailUrl(URL.createObjectURL(file));
     };
 
+    const handleIngredientChange = (index, e) => {
+        const { name, value } = e.target;
+        const newIngredients = [...ingredientsList];
+        newIngredients[index][name] = value;
+        setIngredientsList(newIngredients);
+    };
+    const handleAddIngredient = () => {
+        setIngredientsList([...ingredientsList, { name: "", quantity: "", unit: "" }]);
+    };
+    const handleRemoveIngredient = (index) => {
+        const newIngredients = ingredientsList.filter((_, i) => i !== index);
+        setIngredientsList(newIngredients);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const dataToSend = new FormData();
-        Object.entries(form).forEach(([key, value]) => {
-            if (key !== "image") dataToSend.append(key, value);
-        });
-
-        if (imageFile) dataToSend.append("image", imageFile);
-        if (thumbnailFile) dataToSend.append("thumbnail", thumbnailFile);
-
-        const config = {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-                "Content-Type": "multipart/form-data"
-            }
-        };
-
         try {
+            if (ingredientsList.length === 0 || ingredientsList.some(item => !item.name || !item.quantity || !item.unit)) {
+                alert("Vous devez ajouter au moins un ingrédient.");
+                return;
+            }
+
+            const dataToSend = new FormData();
+            Object.entries(form).forEach(([key, value]) => {
+                if (key !== "image") dataToSend.append(key, value);
+            });
+
+            if (imageFile) dataToSend.append("image", imageFile);
+            if (thumbnailFile) dataToSend.append("thumbnail", thumbnailFile);
+
+            dataToSend.append("ingredients", JSON.stringify(ingredientsList));
+
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    "Content-Type": "multipart/form-data"
+                }
+            };
             if (id) {
                 if (window.confirm("Modifier ce cocktail ?")) {
                     await axios.put(`http://localhost:5000/api/cocktails/${id}`, dataToSend, config);
@@ -93,9 +114,17 @@ const AdminCocktailForm = () => {
         }
     };
 
-    const ingredientsList = form.ingredients
-        ? form.ingredients.split(",").map((item, idx) => <li key={idx}>{item.trim()}</li>)
-        : null;
+    const ingredientsDisplay = useMemo(() => {
+        return ingredientsList.length > 0
+            ? ingredientsList
+                .filter(item => item.name && item.quantity && item.unit)
+                .map((item, idx) => (
+                    <li key={idx}>
+                        {item.quantity}{item.unit} de {item.name}
+                    </li>
+                ))
+            : null;
+    }, [ingredientsList]);
 
     return (
         <div className="cocktail-form">
@@ -154,17 +183,14 @@ const AdminCocktailForm = () => {
                                     </div>
                                 </div>
 
-
-
-
                                 <h5 className="text-muted">{form.theme || "Thème du cocktail"}</h5>
                                 <strong>Description :</strong>
                                 <p className="mt-2">{form.description || "Pas de description"}</p>
                                 <strong>Recette :</strong>
                                 <p className="text-start mt-2">{form.recipe || "Pas de recette"}</p>
                                 <strong>Ingrédients :</strong>
-                                {ingredientsList ? (
-                                    <ul className="text-start mt-2">{ingredientsList}</ul>
+                                {ingredientsDisplay ? (
+                                    <ul className="text-start mt-2">{ingredientsDisplay}</ul>
                                 ) : (
                                     <p>Aucun ingrédient</p>
                                 )}
@@ -195,9 +221,44 @@ const AdminCocktailForm = () => {
                                 </div>
 
                                 <div className="mb-3">
-                                    <label className="form-label">Ingrédients (séparés par des virgules)</label>
-                                    <textarea className="form-control" name="ingredients" value={form.ingredients}
-                                              onChange={handleChange} rows="2" required/>
+                                    <label className="form-label">Ingrédients</label>
+                                    {ingredientsList.map((ingredient, index) => (
+                                        <div key={index} className="d-flex gap-2 mb-2">
+                                            <input
+                                                type="text"
+                                                name="name"
+                                                placeholder="Nom"
+                                                value={ingredient.name}
+                                                onChange={(e) => handleIngredientChange(index, e)}
+                                                className="form-control"
+                                                required
+                                            />
+                                            <input
+                                                type="number"
+                                                name="quantity"
+                                                placeholder="Quantité"
+                                                value={ingredient.quantity}
+                                                onChange={(e) => handleIngredientChange(index, e)}
+                                                className="form-control"
+                                                required
+                                            />
+                                            <input
+                                                type="text"
+                                                name="unit"
+                                                placeholder="Unité"
+                                                value={ingredient.unit}
+                                                onChange={(e) => handleIngredientChange(index, e)}
+                                                className="form-control"
+                                                required
+                                            />
+                                            {ingredientsList.length > 1 && (
+                                                <button type="button" className="btn btn-danger" onClick={() => handleRemoveIngredient(index)}>
+                                                    ✕
+                                                </button>
+                                            )}
+                                        </div>
+                                    ))}
+                                    <button type="button" className="btn btn-secondary mt-2" onClick={handleAddIngredient}>+ Ajouter un ingrédient</button>
                                 </div>
 
                                 <div className="mb-3">

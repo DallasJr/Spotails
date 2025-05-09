@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Cocktail = require("../models/Cocktail");
+const Ingredient = require("../models/Ingredient");
 const verifyAdmin = require('../middleware/verifyAdmin');
 const multer = require("multer");
 const path = require("path");
@@ -38,58 +39,115 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-    const cocktail = await Cocktail.findById(req.params.id);
-    res.json(cocktail);
+    try {
+        const cocktail = await Cocktail.findById(req.params.id).populate("ingredients");
+        if (!cocktail) {
+            return res.status(404).json({ message: "Cocktail introuvable." });
+        }
+        res.json(cocktail);
+    } catch (err) {
+        res.status(500).json({ message: "Erreur lors de la récupération du cocktail.", error: err.message });
+    }
 });
 
 router.post("/", verifyAdmin, multipleUpload, async (req, res) => {
     try {
         const { name, ingredients, recipe, theme, description, color } = req.body;
+
         if (!name || !req.files["image"] || !req.files["thumbnail"] || !ingredients || !recipe || !theme || !description) {
-            return res.status(400).json({ message: 'Tous les champs sont requis.' });
+            return res.status(400).json({ error: 'BAD_REQUEST', message: 'Tous les champs sont requis.' });
         }
+
+        let ingredientsData;
+        try {
+            ingredientsData = JSON.parse(ingredients);
+            if (ingredientsData.length === 0 || ingredientsData.some(item => !item.name || !item.quantity || !item.unit)) {
+                return res.status(400).json({ message: 'Vous devez ajouter au moins un ingrédient complet.' });
+            }
+        } catch (e) {
+            console.error("Erreur parsing ingrédients", e);
+            return res.status(400).json({ message: 'Format ingrédients invalide.', error: e.message });
+        }
+
         const newCocktail = new Cocktail({
             name,
             image: req.files["image"][0].filename,
             thumbnail: req.files["thumbnail"][0].filename,
-            ingredients,
             recipe,
             theme,
             description,
             color: color || "#13a444"
         });
+        await newCocktail.save();
+        console.log("Cocktail créé :", newCocktail);
 
+        newCocktail.ingredients = await Promise.all(
+            ingredientsData.map(async (ingredient) => {
+                const {name, quantity, unit} = ingredient;
+                const ingredientDoc = new Ingredient({
+                    name,
+                    quantity,
+                    unit,
+                    cocktail: newCocktail._id
+                });
+                await ingredientDoc.save();
+                return ingredientDoc._id;
+            })
+        );
         await newCocktail.save();
         return res.status(201).json({ message: 'Cocktail ajouté avec succès', cocktail: newCocktail });
     } catch (error) {
-        return res.status(500).json({ message: 'Erreur interne du serveur', error: err.message });
+        return res.status(500).json({ message: 'Erreur interne du serveur', error: error.message });
     }
 });
 
 router.put("/:id", verifyAdmin, multipleUpload, async (req, res) => {
     try {
+        console.log("Données reçues :", req.body);
         const cocktail = await Cocktail.findById(req.params.id);
         if (!cocktail) {
             return res.status(404).json({ message: "Cocktail introuvable." });
         }
         const updateData = { ...req.body };
+
+        let ingredientsData = [];
         if (updateData.ingredients) {
-            updateData.ingredients = updateData.ingredients.split(",").map(i => i.trim());
-        }
-        if (req.files["image"]) {
-            if (cocktail.image) deleteImage(cocktail.image);
-            updateData.image = req.files["image"][0].filename;
+            try {
+                ingredientsData = JSON.parse(updateData.ingredients);
+                if (ingredientsData.length === 0 || ingredientsData.some(item => !item.name || !item.quantity || !item.unit)) {
+                    return res.status(400).json({ message: 'Vous devez ajouter au moins un ingrédient complet.' });
+                }
+            } catch (e) {
+                return res.status(400).json({ message: "Format ingrédients invalide.", error: e.message });
+            }
         }
 
-        if (req.files["thumbnail"]) {
+        if (req.files?.image?.[0]) {
+            if (cocktail.image) deleteImage(cocktail.image);
+            updateData.image = req.files.image[0].filename;
+        }
+        if (req.files?.thumbnail?.[0]) {
             if (cocktail.thumbnail) deleteImage(cocktail.thumbnail);
-            updateData.thumbnail = req.files["thumbnail"][0].filename;
+            updateData.thumbnail = req.files.thumbnail[0].filename;
         }
-        const updatedCocktail = await Cocktail.findByIdAndUpdate(req.params.id, updateData, { new: true });
-        if (!updatedCocktail) {
-            return res.status(404).json({ message: "Cocktail introuvable." });
-        }
-        res.json(updatedCocktail);
+        cocktail.set(updateData);
+        await Ingredient.deleteMany({ cocktail: cocktail._id });
+
+        cocktail.ingredients = await Promise.all(
+            ingredientsData.map(async (ingredient) => {
+                const {name, quantity, unit} = ingredient;
+                const ingredientDoc = new Ingredient({
+                    name,
+                    quantity,
+                    unit,
+                    cocktail: cocktail._id
+                });
+                await ingredientDoc.save();
+                return ingredientDoc._id;
+            })
+        );
+        await cocktail.save();
+        res.json(cocktail);
     } catch (err) {
         res.status(400).json({ message: "Erreur lors de la mise à jour." });
     }
@@ -99,6 +157,8 @@ router.delete("/:id", verifyAdmin, async (req, res) => {
     try {
         const deletedCocktail = await Cocktail.findByIdAndDelete(req.params.id);
         if (!deletedCocktail) return res.status(404).json({ message: "Cocktail introuvable." });
+
+        await Ingredient.deleteMany({ cocktail: deletedCocktail._id });
 
         if (deletedCocktail.image) deleteImage(deletedCocktail.image);
         if (deletedCocktail.thumbnail) deleteImage(deletedCocktail.thumbnail);

@@ -1,0 +1,22 @@
+.cocktail-name-detail {
+    color: white;
+    font-size: 4rem;
+    font-weight: bold;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    text-align: center;
+}
+
+.cocktail-detail-card {
+    filter: drop-shadow(2px 10px 30px rgba(0, 0, 0, 0.5));
+}
+
+.favorite-star-detail {
+    position: absolute;
+    right: 20px;
+    top: 0;
+    color: #ffc107;
+    font-size: 4rem;
+    z-index: 2;
+    text-shadow: 0 0 5px #000;
+}
