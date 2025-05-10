@@ -11,7 +11,8 @@ const AdminCocktailForm = () => {
         recipe: "",
         description: "",
         image: "",
-        color: "#13a444"
+        color: "#13a444",
+        textColor: "black"
     });
 
     const [imageFile, setImageFile] = useState(null);
@@ -26,8 +27,12 @@ const AdminCocktailForm = () => {
 
     useEffect(() => {
         if (id) {
-            axios.get(`http://localhost:5000/api/cocktails/${id}`)
-                .then(res => {
+            const token = localStorage.getItem("token");
+            axios.get(`http://localhost:5000/api/cocktails/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            }).then(res => {
                 const c = res.data;
                 setForm({
                     name: c.name,
@@ -36,7 +41,8 @@ const AdminCocktailForm = () => {
                     description: c.description,
                     image: c.image,
                     thumbnail: c.thumbnail,
-                    color: c.color || "#13a444"
+                    color: c.color || "#13a444",
+                    textColor: c.textColor || "black",
                 });
                 setPreviewUrl(`http://localhost:5000/uploads/${c.image}`);
                 setThumbnailUrl(`http://localhost:5000/uploads/${c.thumbnail}`);
@@ -272,6 +278,34 @@ const AdminCocktailForm = () => {
                                     <label className="form-label">Couleur associée</label>
                                     <input type="color" className="form-control form-control-color" name="color"
                                            value={form.color} onChange={handleChange}/>
+                                </div>
+
+                                <div className="mb-3">
+                                    <label className="form-label d-block">Couleur du texte</label>
+                                    <div className="form-check form-check-inline">
+                                        <input
+                                            className="form-check-input"
+                                            type="radio"
+                                            name="textColor"
+                                            id="textColorBlack"
+                                            value="black"
+                                            checked={form.textColor === "black"}
+                                            onChange={handleChange}
+                                        />
+                                        <label className="form-check-label" htmlFor="textColorBlack">Noir</label>
+                                    </div>
+                                    <div className="form-check form-check-inline">
+                                        <input
+                                            className="form-check-input"
+                                            type="radio"
+                                            name="textColor"
+                                            id="textColorWhite"
+                                            value="white"
+                                            checked={form.textColor === "white"}
+                                            onChange={handleChange}
+                                        />
+                                        <label className="form-check-label" htmlFor="textColorWhite">Blanc</label>
+                                    </div>
                                 </div>
 
                                 <div className="mb-4">

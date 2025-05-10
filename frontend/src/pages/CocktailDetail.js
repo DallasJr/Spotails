@@ -16,7 +16,10 @@ const CocktailDetail = () => {
     useEffect(() => {
         const fetchCocktail = async () => {
             try {
-                const res = await axios.get(`http://localhost:5000/api/cocktails/${id}`);
+                const token = localStorage.getItem("token");
+                const res = await axios.get(`http://localhost:5000/api/cocktails/${id}`, {
+                    headers: token ? { Authorization: `Bearer ${token}` } : {}
+                });
                 setCocktail(res.data);
             } catch (err) {
                 setNotFound(true);
@@ -72,11 +75,16 @@ const CocktailDetail = () => {
     return (
         <div className="container mt-5">
             <div className="d-flex flex-column">
+                {cocktail && !cocktail.publish && (
+                    <div className="alert alert-warning mt-3">
+                        <i className="bi bi-exclamation-triangle-fill"></i> Ce cocktail n'est pas publié. Il est accessible seulement aux admins.
+                    </div>
+                )}
                 <div className="px-5 pb-5 d-flex flex-column" style={{
                     backgroundColor: cocktail.color,
                     borderRadius: "40px 40px 0 0"
                 }}>
-                    <h2 className="cocktail-theme my-3 m-auto">
+                    <h2 className="cocktail-theme my-3 m-auto" style={{ color: cocktail.textColor }}>
                         {cocktail.theme}
                     </h2>
                     <div className="cocktail-detail-card p-5 d-flex flex-column align-items-center justify-content-center shadow" style={{
@@ -100,12 +108,12 @@ const CocktailDetail = () => {
                             </button>
                         </div>
                     </div>
-                    <h1 className="mx-5 mt-5 text-center"><strong>{cocktail.description}</strong></h1>
+                    <h1 className="mx-5 mt-5 text-center" style={{ color: cocktail.textColor }}><strong>{cocktail.description}</strong></h1>
                 </div>
                 <div className="mx-5 my-5">
                     <div className="text-center person-selector">
                         <label htmlFor="personCount" className="form-label fs-5"
-                        style={{ color: cocktail.color }}><strong>Nombre de personnes : {personCount}</strong></label>
+                               style={{ color: cocktail.textColor === "white" ? "white" : cocktail.color }}><strong>Nombre de personnes : {personCount}</strong></label>
                         <input
                             type="range"
                             className="form-range"
@@ -119,7 +127,8 @@ const CocktailDetail = () => {
                 </div>
                 <div className="cocktail-recipe p-5 mb-5" style={{
                     backgroundColor: cocktail.color,
-                    borderRadius: "0 0 40px 40px"
+                    borderRadius: "0 0 40px 40px",
+                    color: cocktail.textColor
                 }}>
                     <h3 className="mt-4 mb-4 text-center"><strong>Ingrédients :</strong></h3>
                     <div className="row">
@@ -127,11 +136,12 @@ const CocktailDetail = () => {
                             <div className="col-6 col-md-4 col-lg-3 mb-4" key={ingredient._id}>
                                 <div className="card py-3 px-3 text-center h-100 shadow" style={{
                                     backgroundColor: "transparent",
-
                                 }}>
-                                    <h2>{ingredient.quantity * personCount}</h2>
-                                    <h5 className="text-muted">{ingredient.unit}</h5>
-                                    <h4>{ingredient.name}</h4>
+                                    <h2 style={{ color: cocktail.textColor }}>{ingredient.quantity * personCount}</h2>
+                                    <h5 style={{ color: cocktail.textColor === "white" ? "#9f9f9f" : "" }} className={cocktail.textColor === "black" ? "text-muted" : ""}>
+                                        {ingredient.unit}
+                                    </h5>
+                                    <h4 style={{ color: cocktail.textColor }}>{ingredient.name}</h4>
                                 </div>
                             </div>
                         ))}

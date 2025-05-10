@@ -63,9 +63,10 @@ body {
     color: black;
     z-index: 3;
     max-height: 90%;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
     text-align: center;
+
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .favorite-star {

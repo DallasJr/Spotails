@@ -8,7 +8,12 @@ const AdminCocktailManager = () => {
     const [cocktails, setCocktails] = useState([]);
 
     const fetchCocktails = async () => {
-        const res = await axios.get("http://localhost:5000/api/cocktails");
+        const config = {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+        };
+        const res = await axios.get("http://localhost:5000/api/cocktails/admin", config);
         setCocktails(res.data);
     };
 
@@ -29,6 +34,18 @@ const AdminCocktailManager = () => {
         }
     };
 
+    const handlePublishToggle = async (id, newValue) => {
+        try {
+            await axios.patch(`http://localhost:5000/api/cocktails/${id}/publish`,
+                { publish: newValue },
+                { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+            );
+            fetchCocktails();
+        } catch (error) {
+            processError(error);
+        }
+    };
+
     return (
         <div className="managing-panel">
             <div className="container pt-5 pb-5">
@@ -43,6 +60,7 @@ const AdminCocktailManager = () => {
                     <tr>
                         <th>Nom</th>
                         <th>Thème</th>
+                        <th>Publier</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -51,6 +69,16 @@ const AdminCocktailManager = () => {
                         <tr key={cocktail._id}>
                             <td>{cocktail.name}</td>
                             <td>{cocktail.theme}</td>
+                            <td>
+                                <div className="form-check">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        checked={cocktail.publish}
+                                        onChange={() => handlePublishToggle(cocktail._id, !cocktail.publish)}
+                                    />
+                                </div>
+                            </td>
                             <td>
                                 <Link to={`/cocktails/${cocktail._id}`} className="btn btn-sm btn-info me-2">
                                     <i className="bi bi-eye"></i>

@@ -3,6 +3,7 @@ const router = express.Router();
 const Cocktail = require("../models/Cocktail");
 const Ingredient = require("../models/Ingredient");
 const verifyAdmin = require('../middleware/verifyAdmin');
+const verifyToken = require('../middleware/verifyToken');
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
@@ -34,14 +35,32 @@ const deleteImage = (filename) => {
 };
 
 router.get("/", async (req, res) => {
-    const cocktails = await Cocktail.find();
-    res.json(cocktails);
+    try {
+        const cocktails = await Cocktail.find({ publish: true });
+        res.json(cocktails);
+    } catch (err) {
+        res.status(500).json({ message: "Erreur lors de la récupération des cocktails.", error: err.message });
+    }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/admin", verifyAdmin, async (req, res) => {
+    try {
+        const cocktails = await Cocktail.find();
+        res.json(cocktails);
+    } catch (err) {
+        res.status(500).json({ message: "Erreur lors de la récupération des cocktails pour l'admin.", error: err.message });
+    }
+});
+
+router.get("/:id", verifyToken, async (req, res) => {
     try {
         const cocktail = await Cocktail.findById(req.params.id).populate("ingredients");
         if (!cocktail) {
+            console.log("cocktail introuvable")
+            return res.status(404).json({ message: "Cocktail introuvable." });
+        }
+        if (!cocktail.publish && (!req.user || req.user.role !== "admin")) {
+            console.log("cocktail non publie")
             return res.status(404).json({ message: "Cocktail introuvable." });
         }
         res.json(cocktail);
@@ -52,7 +71,7 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", verifyAdmin, multipleUpload, async (req, res) => {
     try {
-        const { name, ingredients, recipe, theme, description, color } = req.body;
+        const { name, ingredients, recipe, theme, description, color, textColor } = req.body;
 
         if (!name || !req.files["image"] || !req.files["thumbnail"] || !ingredients || !recipe || !theme || !description) {
             return res.status(400).json({ error: 'BAD_REQUEST', message: 'Tous les champs sont requis.' });
@@ -76,7 +95,9 @@ router.post("/", verifyAdmin, multipleUpload, async (req, res) => {
             recipe,
             theme,
             description,
-            color: color || "#13a444"
+            color: color || "#13a444",
+            textColor: textColor || "black",
+            publish: false
         });
         await newCocktail.save();
         console.log("Cocktail créé :", newCocktail);
@@ -167,5 +188,20 @@ router.delete("/:id", verifyAdmin, async (req, res) => {
         res.status(400).json({ message: "Erreur lors de la suppression." });
     }
 });
+
+router.patch("/:id/publish", verifyAdmin, async (req, res) => {
+    try {
+        const cocktail = await Cocktail.findById(req.params.id);
+        if (!cocktail) {
+            return res.status(404).json({ message: "Cocktail introuvable." });
+        }
+        cocktail.publish = req.body.publish;
+        await cocktail.save();
+        res.json(cocktail);
+    } catch (err) {
+        res.status(400).json({ message: "Erreur lors de la mise à jour du publish." });
+    }
+});
+
 
 module.exports = router;

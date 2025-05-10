@@ -8,6 +8,8 @@ const cocktailSchema = new mongoose.Schema({
     recipe: { type: String, required: true },
     theme: { type: String, required: true },
     description: { type: String, required: true },
+    textColor: { type: String, enum: ['black', 'white'], default: 'black', required: true },
+    publish: { type: Boolean, required: true },
     color: { type: String, default: "#1ED760", required: true },
 });
 
