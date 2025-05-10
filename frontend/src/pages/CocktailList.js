@@ -10,6 +10,13 @@ const CocktailList = () => {
     const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
     useEffect(() => {
+        const ratio = window.devicePixelRatio;
+        if (ratio === 1) {
+            document.body.style.zoom = "0.93";
+        } else {
+            document.body.style.zoom = "1";
+        }
+
         fetchCocktails();
         const token = localStorage.getItem("token");
         if (token) fetchFavorites();
