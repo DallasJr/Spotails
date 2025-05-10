@@ -15,80 +15,89 @@ import AdminCocktailForm from "./pages/AdminCocktailForm";
 import AccountPage from "./pages/AccountPage";
 import PublicRoute from "./components/PublicRoute";
 import LoginPage from "./pages/LoginPage";
+import {useEffect} from "react";
 
 function App() {
-  return (
-      <Router>
-          <div className="d-flex flex-column min-vh-100">
-              <Navbar />
-              <div className="flex-grow-1">
-                  <Routes>
-                      <Route path="/" element={<LandingPage />} />
-                      <Route path="/cocktails" element={<CocktailList />} />
-                      <Route path="/cocktails/:id" element={<CocktailDetail />} />
-                      <Route path="/login"
-                          element={
-                             <PublicRoute>
-                                 <LoginPage/>
-                             </PublicRoute>
-                          }
-                      />
-                      <Route path="/register"
-                          element={
-                              <PublicRoute>
-                                  <RegisterPage />
-                              </PublicRoute>
-                          }
-                      />
-                      <Route path="/account"
-                          element={
-                              <PrivateRoute>
-                                  <AccountPage />
-                              </PrivateRoute>
-                          }
-                      />
-                      <Route path="*" element={<NotFoundPage />} />
-                      <Route path="/admin"
-                          element={
-                              <AdminRoute>
-                                  <AdminDashboard />
-                              </AdminRoute>
-                          }
-                      />
-                      <Route path="/admin/cocktails"
-                          element={
-                              <AdminRoute>
-                                  <AdminCocktailManager />
-                              </AdminRoute>
-                          }
-                      />
-                      <Route path="/admin/users"
-                          element={
-                              <AdminRoute>
-                                  <AdminUserManager />
-                              </AdminRoute>
-                          }
-                      />
-                      <Route path="/admin/cocktails/add"
-                          element={
-                              <AdminRoute>
-                                  <AdminCocktailForm />
-                              </AdminRoute>
-                          }
-                      />
-                      <Route path="/admin/cocktails/edit/:id"
-                          element={
-                              <AdminRoute>
-                                  <AdminCocktailForm />
-                              </AdminRoute>
-                          }
-                      />
-                  </Routes>
-              </div>
-              <Footer />
-          </div>
-      </Router>
-  );
+    useEffect(() => {
+        const ratio = window.devicePixelRatio;
+        if (ratio === 1) {
+            document.body.style.zoom = "0.93";
+        } else {
+            document.body.style.zoom = "1";
+        }
+    }, []);
+    return (
+        <Router>
+            <div className="d-flex flex-column min-vh-100">
+                <Navbar />
+                <div className="flex-grow-1">
+                    <Routes>
+                        <Route path="/" element={<LandingPage />} />
+                        <Route path="/cocktails" element={<CocktailList />} />
+                        <Route path="/cocktails/:id" element={<CocktailDetail />} />
+                        <Route path="/login"
+                            element={
+                                <PublicRoute>
+                                    <LoginPage/>
+                                </PublicRoute>
+                            }
+                        />
+                        <Route path="/register"
+                            element={
+                                <PublicRoute>
+                                    <RegisterPage />
+                                </PublicRoute>
+                            }
+                        />
+                        <Route path="/account"
+                            element={
+                                <PrivateRoute>
+                                    <AccountPage />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route path="*" element={<NotFoundPage />} />
+                        <Route path="/admin"
+                            element={
+                                <AdminRoute>
+                                    <AdminDashboard />
+                                </AdminRoute>
+                            }
+                        />
+                        <Route path="/admin/cocktails"
+                            element={
+                                <AdminRoute>
+                                    <AdminCocktailManager />
+                                </AdminRoute>
+                            }
+                        />
+                        <Route path="/admin/users"
+                            element={
+                                <AdminRoute>
+                                    <AdminUserManager />
+                                </AdminRoute>
+                            }
+                        />
+                        <Route path="/admin/cocktails/add"
+                            element={
+                                <AdminRoute>
+                                    <AdminCocktailForm />
+                                </AdminRoute>
+                            }
+                        />
+                        <Route path="/admin/cocktails/edit/:id"
+                            element={
+                                <AdminRoute>
+                                    <AdminCocktailForm />
+                                </AdminRoute>
+                            }
+                        />
+                    </Routes>
+                </div>
+                <Footer />
+            </div>
+        </Router>
+    );
 }
 
 export default App;
