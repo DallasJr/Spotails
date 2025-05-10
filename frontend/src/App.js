@@ -15,11 +15,23 @@ import AdminCocktailForm from "./pages/AdminCocktailForm";
 import AccountPage from "./pages/AccountPage";
 import PublicRoute from "./components/PublicRoute";
 import LoginPage from "./pages/LoginPage";
+import {useEffect} from "react";
 
 function App() {
+
+    useEffect(() => {
+        const ratio = window.devicePixelRatio;
+        if (ratio === 1) {
+            document.body.style.zoom = "0.93";
+        } else {
+            document.body.style.zoom = "1";
+        }
+    }, []);
+
+
     return (
         <Router>
-            <div className="d-flex flex-column min-vh-100">
+            <div className="d-flex flex-column flex-grow-1">
                 <Navbar />
                 <div className="flex-grow-1">
                     <Routes>
