@@ -65,7 +65,7 @@ const CocktailList = () => {
         setTimeout(() => {
             setSelectedCocktail(cocktail);
             setDisplayAnimation("animate-in");
-        }, 400);
+        }, 900);
     };
 
     return (
@@ -78,18 +78,18 @@ const CocktailList = () => {
                                 backgroundImage: `url(http://localhost:5000/uploads/${selectedCocktail.thumbnail})`,
                                 backgroundSize: "cover"
                             }}>
-                            <h2 className="cocktail-theme mb-4" style={{color: selectedCocktail.color}}>
+                            <h2 className="cocktail-theme mb-4" style={{color: selectedCocktail.color, textShadow: "2px 2px 3px black"}}>
                                 {selectedCocktail.theme}
                             </h2>
-                            <h1 className="cocktail-description mb-4">{selectedCocktail.description}</h1>
+                            <h1 className="cocktail-description mb-4" style={{textShadow: "2px 2px 3px black"}}>{selectedCocktail.description}</h1>
                             <div className="mt-4 d-flex flex-wrap justify-content-md-start justify-content-center">
-                                <Link to={`/cocktails/${selectedCocktail._id}`} className="btn btn-light me-4 mb-sm-3 mb-3"
+                                <Link to={`/cocktails/${selectedCocktail._id}`} className="btn btn-light me-4 mb-sm-3 mb-3 shadow"
                                       style={{
                                           backgroundColor: selectedCocktail.color,
                                           borderColor: selectedCocktail.color
                                       }}>En savoir plus</Link>
                                 <button
-                                    className={`btn btn-outline-warning mb-sm-3 mb-3`}
+                                    className={`btn btn-outline-warning mb-sm-3 mb-3 shadow`}
                                     onClick={handleFavoriteToggle}
                                 >
                                     <i className={`bi ${favoriteIds.includes(selectedCocktail._id) ? "bi-star-fill" : "bi-star"}`}></i>
@@ -105,7 +105,7 @@ const CocktailList = () => {
                         <div className={`cocktail-display d-flex align-items-center justify-content-center ${displayAnimation}`}
                              style={{backgroundColor: selectedCocktail.color}}>
                             <img src={`http://localhost:5000/uploads/${selectedCocktail.image}`}
-                                 alt={selectedCocktail.name} className="cocktail-main-img"/>
+                                 alt={selectedCocktail.name} className={`cocktail-main-img cocktail-display-image ${displayAnimation}`}/>
                             <div className="cocktail-name">{selectedCocktail.name.toUpperCase()}</div>
                         </div>
                     )}

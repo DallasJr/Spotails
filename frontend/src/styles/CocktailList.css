@@ -151,17 +151,25 @@ body {
 }
 
 .cocktail-display.animate-in {
-    animation: slideInRight 0.5s ease forwards;
+    animation: slideInRight 1s ease forwards;
 }
 
 .cocktail-display.animate-out {
-    animation: slideOutRight 0.5s ease forwards;
+    animation: slideOutRight 1s ease forwards;
+}
+
+.cocktail-display-image.animate-in {
+    animation: slideInRight 2s ease forwards;
+}
+
+.cocktail-display-image.animate-out {
+    animation: slideOutRight 2s ease forwards;
 }
 
 .cocktail-infos.animate-in {
-    animation: slideInLeft 0.5s ease forwards;
+    animation: slideInLeft 1s ease forwards;
 }
 
 .cocktail-infos.animate-out {
-    animation: slideOutLeft 0.5s ease forwards;
+    animation: slideOutLeft 1s ease forwards;
 }

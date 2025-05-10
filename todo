@@ -1,5 +1,5 @@
-CocktailDetail
-add public bool to cocktail model
+add color selection (black or white) to cocktail model
+add public bool to cocktail model (update admincocktailList)
 Tab title/favicon
 upgrade Framer
 final file

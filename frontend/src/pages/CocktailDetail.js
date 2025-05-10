@@ -4,12 +4,14 @@ import axios from "axios";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import NotFoundPage from "./NotFoundPage";
 import "../styles/CocktailDetail.css";
+import {formatRecipeText} from "../utils/textUtils";
 
 const CocktailDetail = () => {
     const { id } = useParams();
     const [cocktail, setCocktail] = useState(null);
     const [isFavorite, setIsFavorite] = useState(false);
     const [notFound, setNotFound] = useState(false);
+    const [personCount, setPersonCount] = useState(1);
 
     useEffect(() => {
         const fetchCocktail = async () => {
@@ -72,12 +74,12 @@ const CocktailDetail = () => {
             <div className="d-flex flex-column">
                 <div className="px-5 pb-5 d-flex flex-column" style={{
                     backgroundColor: cocktail.color,
-                    borderRadius: "40px"
+                    borderRadius: "40px 40px 0 0"
                 }}>
                     <h2 className="cocktail-theme my-3 m-auto">
                         {cocktail.theme}
                     </h2>
-                    <div className="cocktail-detail-card p-5 d-flex flex-column align-items-center justify-content-center" style={{
+                    <div className="cocktail-detail-card p-5 d-flex flex-column align-items-center justify-content-center shadow" style={{
                         backgroundImage: `url(http://localhost:5000/uploads/${cocktail.thumbnail})`,
                         backgroundSize: "cover",
                         borderRadius: "20px",
@@ -87,10 +89,10 @@ const CocktailDetail = () => {
                         )}
                         <img src={`http://localhost:5000/uploads/${cocktail.image}`}
                              alt={cocktail.name} className="cocktail-main-img"/>
-                        <h1 className="cocktail-name-detail mb-4">{cocktail.name}</h1>
+                        <h1 className="cocktail-name-detail mb-4" style={{textShadow: "2px 2px 3px black"}}>{cocktail.name}</h1>
                         <div className="mt-4 d-flex flex-wrap justify-content-md-start justify-content-center">
                             <button
-                                className={`btn btn-outline-warning`}
+                                className={`btn btn-outline-warning shadow`}
                                 onClick={handleFavoriteToggle}
                             >
                                 <i className={`bi ${isFavorite ? "bi-star-fill" : "bi-star"}`}></i>
@@ -98,12 +100,58 @@ const CocktailDetail = () => {
                             </button>
                         </div>
                     </div>
+                    <h1 className="mx-5 mt-5 text-center"><strong>{cocktail.description}</strong></h1>
                 </div>
+                <div className="mx-5 my-5">
+                    <div className="text-center person-selector">
+                        <label htmlFor="personCount" className="form-label fs-5"
+                        style={{ color: cocktail.color }}><strong>Nombre de personnes : {personCount}</strong></label>
+                        <input
+                            type="range"
+                            className="form-range"
+                            min="1"
+                            max="4"
+                            value={personCount}
+                            onChange={(e) => setPersonCount(parseInt(e.target.value))}
+                            id="personCount"
+                        />
+                    </div>
+                </div>
+                <div className="cocktail-recipe p-5 mb-5" style={{
+                    backgroundColor: cocktail.color,
+                    borderRadius: "0 0 40px 40px"
+                }}>
+                    <h3 className="mt-4 mb-4 text-center"><strong>Ingrédients :</strong></h3>
+                    <div className="row">
+                        {cocktail.ingredients.map((ingredient) => (
+                            <div className="col-6 col-md-4 col-lg-3 mb-4" key={ingredient._id}>
+                                <div className="card py-3 px-3 text-center h-100 shadow" style={{
+                                    backgroundColor: "transparent",
 
-
-                <h1>{cocktail.description}</h1>
-                <p><strong>Ingrédients :</strong> {cocktail.ingredients.join(", ")}</p>
-                <p><strong>Recette :</strong> {cocktail.recipe}</p>
+                                }}>
+                                    <h2>{ingredient.quantity * personCount}</h2>
+                                    <h5 className="text-muted">{ingredient.unit}</h5>
+                                    <h4>{ingredient.name}</h4>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <hr/>
+                    <h3 className="mt-4 mb-4 text-center"><strong>Recette :</strong></h3>
+                    <div className="row align-items-center">
+                        <div className="col-md-8">
+                            <p>{formatRecipeText(cocktail.recipe)}</p>
+                        </div>
+                        <div className="col-md-4 text-center">
+                            <img
+                                src={`http://localhost:5000/uploads/${cocktail.image}`}
+                                alt={cocktail.name}
+                                className="img-fluid cocktail-main-img mt-4 mt-md-0"
+                                style={{ maxHeight: "300px", objectFit: "cover" }}
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

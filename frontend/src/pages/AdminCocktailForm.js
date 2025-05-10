@@ -2,6 +2,7 @@ import React, {useState, useEffect, useMemo} from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { processError } from '../utils/errorUtils';
+import {formatRecipeText} from "../utils/textUtils";
 
 const AdminCocktailForm = () => {
     const [form, setForm] = useState({
@@ -186,14 +187,14 @@ const AdminCocktailForm = () => {
                                 <h5 className="text-muted">{form.theme || "Thème du cocktail"}</h5>
                                 <strong>Description :</strong>
                                 <p className="mt-2">{form.description || "Pas de description"}</p>
-                                <strong>Recette :</strong>
-                                <p className="text-start mt-2">{form.recipe || "Pas de recette"}</p>
                                 <strong>Ingrédients :</strong>
                                 {ingredientsDisplay ? (
                                     <ul className="text-start mt-2">{ingredientsDisplay}</ul>
                                 ) : (
                                     <p>Aucun ingrédient</p>
                                 )}
+                                <strong>Recette :</strong>
+                                <p className="text-start mt-2">{formatRecipeText(form.recipe) || "Pas de recette"}</p>
                             </div>
                         </div>
                     </div>
