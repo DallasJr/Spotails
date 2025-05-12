@@ -6,7 +6,7 @@ import "../styles/AdminPages.css";
 const AdminDashboard = () => {
     return (
         <div className="admin-dashboard container mt-5">
-            <h1 className="mb-4">Admin Dashboard</h1>
+            <h1 className="mb-4">Panel administrateur</h1>
             <div className="row g-4">
                 <div className="col-md-6">
                     <Link to="/admin/cocktails" className="text-decoration-none text-dark">
