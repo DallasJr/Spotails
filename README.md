@@ -94,6 +94,15 @@ Spotails est un site dédié à l'art du cocktail, inspiré par l'univers musica
    npm start
    ```
 
+7. Vous pouvez remplir la bdd :
+   A l'aide de MongoDB Compass:
+      Importez spotails.cocktails.json (trouvable dans /assets)
+      Importez spotails.ingredients.json (trouvable dans /assets)
+      Importez spotails.users.json (trouvable dans /assets)
+   /!\ N'oubliez de re-définir les images et images background des cocktails (trouvable dans /assets)
+
+   Compte admin: admin@gmail.com:12345678
+
 ## Admin Dashboard
 
 L'admin a un tableau de bord accessible pour gérer :
