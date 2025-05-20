@@ -135,7 +135,7 @@ const CocktailList = () => {
     return (
         <div className="container-fluid py-4 cocktail-list">
             <div
-                className="text-center mb-1 mb-md-5 p-4 rounded-4"
+                className="text-center mb-4 mb-md-5 p-4 rounded-4"
                 style={{
                     background: "linear-gradient(120deg, rgba(18, 102, 51, 0.9) 0%, rgba(29, 185, 84, 0.9) 50%, rgba(30, 215, 96, 0.9) 100%)",
                     color: "#fff",
@@ -153,7 +153,7 @@ const CocktailList = () => {
                 </p>
             </div>
 
-            <div className="row mb-4">
+            <div className="row mb-sm-4">
                 <div className="col-12">
                     <div className="search-container mb-4" style={{ maxWidth: "800px", margin: "0 auto" }}>
                         <div
