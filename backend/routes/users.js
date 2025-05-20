@@ -15,18 +15,18 @@ router.delete("/delete-account", verifyAuth, userController.deleteAccount);
 
 router.get("/me", verifyAuth, userController.retrieveAccount);
 
-router.get("/", verifyAuth, verifyAdmin, async (req, res) => {
+router.get("/", verifyAdmin, async (req, res) => {
     const users = await User.find();
     res.json(users);
 });
 
-router.delete("/:id", verifyAuth, verifyAdmin, async (req, res) => {
+router.delete("/:id", verifyAdmin, async (req, res) => {
     await User.findByIdAndDelete(req.params.id);
     res.json({ message: "Utilisateur supprimé" });
 });
 
-router.put("/:id/role", verifyAuth, verifyAdmin, userController.updateRole);
+router.put("/:id/role", verifyAdmin, userController.updateRole);
 
-router.put("/:id/password", verifyAuth, verifyAdmin, userController.resetPassword);
+router.put("/:id/password", verifyAdmin, userController.resetPassword);
 
 module.exports = router;

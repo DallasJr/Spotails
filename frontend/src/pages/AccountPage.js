@@ -80,8 +80,7 @@ const AccountPage = () => {
             setSuccessMessage("E-mail mis à jour avec succès !");
             setError("");
         } catch (err) {
-            setError("Erreur lors de la mise à jour de l'email. " + err.response?.data?.message || err.message);
-            setSuccessMessage("");
+            setError("Erreur lors de la mise à jour de l'email. " + (err.response?.data?.message || err.message));
             fetchUserData();
         }
     };
@@ -104,7 +103,7 @@ const AccountPage = () => {
                 localStorage.removeItem("token");
                 navigate("/login");
             } catch (err) {
-                alert("Erreur lors de la suppression du compte. " + err.response?.data?.message || err.message);
+                alert("Erreur lors de la suppression du compte. " + (err.response?.data?.message || err.message));
             }
         }
     };
@@ -143,7 +142,7 @@ const AccountPage = () => {
             setSuccessMessage("Mot de passe mis à jour avec succès.");
             setError("");
         } catch (err) {
-            setError("Erreur lors de la mise à jour du mot de passe. " + err.response?.data?.message || err.message);
+            setError("Erreur lors de la mise à jour du mot de passe. " + (err.response?.data?.message || err.message));
             setSuccessMessage("");
         }
     };
@@ -153,135 +152,146 @@ const AccountPage = () => {
     }
 
     return (
-        <div className="panel-compte">
-            <div className="container pt-5 pb-5">
-                <h1 className="text-center mb-4">Votre compte</h1>
-                <div className="row">
-                    <div className="col-md-3">
-                        <div className="list-group onglets p-2 mb-3">
-                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                            <a
-                                href="#"
-                                className={`list-group-item ${
-                                    activeTab === "account" ? "active" : "list-group-item-action"
-                                }`}
-                                onClick={() => setActiveTab("account")}
-                            >
-                                <i className="bi bi-gear"></i> Paramètres du compte
-                            </a>
-                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                            <a
-                                href="#"
-                                className={`list-group-item ${
-                                    activeTab === "security" ? "active" : "list-group-item-action"
-                                }`}
-                                onClick={() => setActiveTab("security")}
-                            >
-                                <i className="bi bi-shield"></i> Sécurité
-                            </a>
-                        </div>
+        <div className="container pt-5 pb-5 account-page">
+            <div
+                className="mb-4 p-4 rounded-4"
+                style={{
+                    background: "linear-gradient(90deg, #a4508b 0%, #5f0a87 100%)",
+                    color: "#fff",
+                    boxShadow: "0 4px 32px rgba(90,10,135,0.08)",
+                    borderRadius: "1.5rem"
+                }}
+            >
+                <h2 className="fw-bold mb-2" style={{ fontSize: "1.6rem" }}>
+                    Bienvenue, {userInfo?.username}
+                </h2>
+                <p className="mb-3" style={{ color: "#f3e6fa" }}>
+                    Gérez votre compte Spotails et vos préférences.
+                </p>
+            </div>
+
+            {/* Section compte/navigation */}
+            <div className="mb-4 p-4 rounded-4"
+                 style={{
+                     background: "#232323",
+                     color: "#fff",
+                     boxShadow: "0 2px 16px rgba(0,0,0,0.12)",
+                     borderRadius: "1.5rem"
+                 }}>
+                <div className="fw-bold mb-3" style={{ fontSize: "1.1rem" }}>Compte</div>
+                <div className="list-group list-group-flush">
+                    <div className="list-group-item d-flex align-items-center justify-content-between bg-transparent px-0 py-3"
+                         style={{ cursor: "pointer" }}
+                         onClick={() => setActiveTab("profile")}>
+                        <span style={{ color: "#fff" }}><i className="bi bi-pencil me-2"></i>Modifier le profil</span>
+                        <i className="bi bi-chevron-right"></i>
                     </div>
-
-                    <div className="col-md-9">
-                        {activeTab === "account" && (
-                            <div className="onglet p-3">
-                                <h5>PARAMÈTRES DU COMPTE</h5>
-                                {error && <div className="alert alert-danger">{error}</div>}
-                                {successMessage && <div className="alert alert-success">{successMessage}</div>}
-                                <hr/>
-
-                                <div className="mb-3">
-                                    <label className="form-label">Pseudo</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        value={newUsername}
-                                        onChange={(e) => setNewUsername(e.target.value)}
-                                    />
-                                    <button
-                                        className="btn btn-success mt-2"
-                                        onClick={handleChangeUsername}
-                                    >
-                                        Sauvegarder
-                                    </button>
-                                </div>
-                                <hr/>
-
-                                <div className="mb-3">
-                                    <label className="form-label">Email</label>
-                                    <input
-                                        type="email"
-                                        className="form-control"
-                                        value={newEmail}
-                                        onChange={(e) => setNewEmail(e.target.value)}
-                                    />
-                                    <button
-                                        className="btn btn-success mt-2"
-                                        onClick={handleChangeEmail}
-                                    >
-                                        Sauvegarder
-                                    </button>
-                                </div>
-                                <hr/>
-
-                                <p className="text-danger">Supprimer le compte</p>
-                                <button
-                                    className="btn btn-danger"
-                                    onClick={handleDeleteAccount}
-                                >
-                                    Supprimer le compte
-                                </button>
-                            </div>
-                        )}
-
-                        {activeTab === "security" && (
-                            <div className="onglet p-3">
-                                <h5>SÉCURITÉ</h5>
-                                {error && <div className="alert alert-danger">{error}</div>}
-                                {successMessage && <div className="alert alert-success">{successMessage}</div>}
-                                <hr />
-
-                                <div className="mb-3">
-                                    <label className="form-label">Mot de passe actuel</label>
-                                    <input
-                                        type="password"
-                                        className="form-control"
-                                        value={password.currentPassword || ""}
-                                        placeholder="****************"
-                                        onChange={(e) => setPassword({ ...password, currentPassword: e.target.value })}
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <label className="form-label">Nouveau mot de passe</label>
-                                    <input
-                                        type="password"
-                                        className="form-control"
-                                        value={password.newPassword || ""}
-                                        placeholder="****************"
-                                        onChange={(e) => setPassword({ ...password, newPassword: e.target.value })}
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <label className="form-label">Confirmer le mot de passe</label>
-                                    <input
-                                        type="password"
-                                        className="form-control"
-                                        value={password.confirmPassword || ""}
-                                        placeholder="****************"
-                                        onChange={(e) => setPassword({ ...password, confirmPassword: e.target.value })}
-                                    />
-                                </div>
-                                <button
-                                    className="btn btn-success"
-                                    onClick={handleChangePassword}
-                                >
-                                    Sauvegarder
-                                </button>
-                            </div>
-                        )}
+                    <div className="list-group-item d-flex align-items-center justify-content-between bg-transparent border-0 px-0 py-3"
+                         style={{ cursor: "pointer" }}
+                         onClick={() => setActiveTab("security")}>
+                        <span style={{ color: "#fff" }}><i className="bi bi-shield-lock me-2"></i>Sécurité</span>                        <i className="bi bi-chevron-right"></i>
+                    </div>
+                    <div className="list-group-item d-flex align-items-center justify-content-between bg-transparent border-0 px-0 py-3"
+                         style={{ cursor: "pointer" }}
+                         onClick={() => setActiveTab("delete")}>
+                        <span className="text-danger"><i className="bi bi-trash me-2"></i>Supprimer le compte</span>
+                        <i className="bi bi-chevron-right"></i>
                     </div>
                 </div>
             </div>
+
+            {/* Modales ou sections contextuelles */}
+            {activeTab === "profile" && (
+                <div className="mb-4 p-4 rounded-4" style={{ background: "#181818", color: "#fff", boxShadow: "0 2px 16px rgba(0,0,0,0.12)" }}>
+                    <h5 className="fw-bold mb-3">Modifier le profil</h5>
+                    {error && <div className="alert alert-danger">{error}</div>}
+                    {successMessage && <div className="alert alert-success">{successMessage}</div>}
+                    <div className="mb-3">
+                        <label className="form-label">Pseudo</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            value={newUsername}
+                            onChange={(e) => setNewUsername(e.target.value)}
+                        />
+                        <button className="btn btn-success mt-2" onClick={handleChangeUsername}>
+                            Sauvegarder
+                        </button>
+                    </div>
+                    <div className="mb-3">
+                        <label className="form-label">Email</label>
+                        <input
+                            type="email"
+                            className="form-control"
+                            value={newEmail}
+                            onChange={(e) => setNewEmail(e.target.value)}
+                        />
+                        <button className="btn btn-success mt-2" onClick={handleChangeEmail}>
+                            Sauvegarder
+                        </button>
+                    </div>
+                    <button className="btn btn-secondary mt-2" onClick={() => { setActiveTab(""); setError(""); setSuccessMessage(""); }}>
+                        Retour
+                    </button>
+                </div>
+            )}
+
+            {activeTab === "security" && (
+                <div className="mb-4 p-4 rounded-4" style={{ background: "#181818", color: "#fff", boxShadow: "0 2px 16px rgba(0,0,0,0.12)" }}>
+                    <h5 className="fw-bold mb-3">Sécurité</h5>
+                    {error && <div className="alert alert-danger">{error}</div>}
+                    {successMessage && <div className="alert alert-success">{successMessage}</div>}
+                    <div className="mb-3">
+                        <label className="form-label">Mot de passe actuel</label>
+                        <input
+                            type="password"
+                            className="form-control"
+                            value={password.currentPassword || ""}
+                            placeholder="****************"
+                            onChange={(e) => setPassword({ ...password, currentPassword: e.target.value })}
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <label className="form-label">Nouveau mot de passe</label>
+                        <input
+                            type="password"
+                            className="form-control"
+                            value={password.newPassword || ""}
+                            placeholder="****************"
+                            onChange={(e) => setPassword({ ...password, newPassword: e.target.value })}
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <label className="form-label">Confirmer le mot de passe</label>
+                        <input
+                            type="password"
+                            className="form-control"
+                            value={password.confirmPassword || ""}
+                            placeholder="****************"
+                            onChange={(e) => setPassword({ ...password, confirmPassword: e.target.value })}
+                        />
+                    </div>
+                    <button className="btn btn-success" onClick={handleChangePassword}>
+                        Sauvegarder
+                    </button>
+                    <button className="btn btn-secondary ms-2" onClick={() => { setActiveTab(""); setError(""); setSuccessMessage(""); }}>
+                        Retour
+                    </button>
+                </div>
+            )}
+
+            {activeTab === "delete" && (
+                <div className="mb-4 p-4 rounded-4" style={{ background: "#181818", color: "#fff", boxShadow: "0 2px 16px rgba(0,0,0,0.12)" }}>
+                    <h5 className="fw-bold mb-3 text-danger">Supprimer le compte</h5>
+                    <p>Cette action est <strong>irréversible</strong>. Toutes vos données seront supprimées.</p>
+                    <button className="btn btn-danger" onClick={handleDeleteAccount}>
+                        Confirmer la suppression
+                    </button>
+                    <button className="btn btn-secondary ms-2" onClick={() => setActiveTab("")}>
+                        Annuler
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

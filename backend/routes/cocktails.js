@@ -36,7 +36,7 @@ const deleteImage = (filename) => {
 
 router.get("/", async (req, res) => {
     try {
-        const cocktails = await Cocktail.find({ publish: true });
+        const cocktails = await Cocktail.find({ publish: true }).populate("ingredients");
         res.json(cocktails);
     } catch (err) {
         res.status(500).json({ message: "Erreur lors de la récupération des cocktails.", error: err.message });
