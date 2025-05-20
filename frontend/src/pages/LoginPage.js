@@ -30,7 +30,7 @@ const LoginForm = () => {
         <div className="auth-form mt-5 p-5">
             <div className="container">
                 <h1 className="text-center mb-4">Connexion</h1>
-                <form onSubmit={handleSubmit} className="w-50 mx-auto">
+                <form onSubmit={handleSubmit} className="form-width-md-50 mx-auto">
                     {error && <div className="alert alert-danger">{error}</div>}
                     <div className="mb-3">
                         <label htmlFor="email" className="mb-1">E-mail</label>

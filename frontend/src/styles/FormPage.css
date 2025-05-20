@@ -50,3 +50,11 @@
 .auth-form small {
     color: #c5c5c5;
 }
+
+@media (min-width: 768px) {
+
+    .form-width-md-50 {
+        width: 50% !important;
+    }
+
+}

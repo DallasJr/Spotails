@@ -122,7 +122,7 @@ const AdminUserManager = () => {
                             <td>
                                 <button
                                     onClick={() => handleRoleChange(user._id, user.role === "admin" ? "user" : "admin")}
-                                    className="btn btn-sm btn-warning me-2"
+                                    className="btn btn-sm btn-warning me-0 me-md-2 mb-2 mb-md-0"
                                 >
                                     <i className="bi bi-shield-lock"></i> {user.role === "admin" ? "Rétrograder" : "Promouvoir"}
                                 </button>
